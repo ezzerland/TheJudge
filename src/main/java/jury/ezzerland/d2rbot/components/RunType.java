@@ -1,0 +1,39 @@
+package jury.ezzerland.d2rbot.components;
+
+public enum RunType {
+
+    BAAL(0),
+    CHAOS(1),
+    TERRORZONE(2),
+    COW(3),
+    MAGICFIND(4);
+
+    private final int number;
+
+    RunType(int number) { this.number = number; }
+    public int getNumber() { return number; }
+    public String getTypeAsString(RunType type) {
+        String asString = "";
+        switch (type) {
+            case BAAL:
+                asString = "Baal Run";
+                break;
+            case CHAOS:
+                asString = "Chaos Run";
+                break;
+            case TERRORZONE:
+                asString = "TZ Run";
+                break;
+            case COW:
+                asString = "Cow Run";
+                break;
+            case MAGICFIND:
+                asString = "MF Run";
+                break;
+            default:
+                asString = "???";
+                break;
+        }
+        return asString;
+    }
+}
