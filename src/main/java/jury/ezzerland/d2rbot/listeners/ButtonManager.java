@@ -42,6 +42,9 @@ public class ButtonManager extends ListenerAdapter {
             case "rename-judge-queue":
                 new CmdRename(event);
                 break;
+            case "runs-judge-queue":
+                new CmdRuns(event);
+                break;
             case "ladder-judge-queue":
                 new CmdList(event, true, user);
                 break;

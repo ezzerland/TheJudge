@@ -4,6 +4,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
@@ -12,7 +14,6 @@ import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
 
-import javax.swing.text.html.Option;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,12 +39,12 @@ public class Responses {
                 "`/broadcast` will announce your run as available to join.\n" +
                 "`/rename` will allow you to update the current game name and password for your run.";
     }
+    public static String joinedQueue(String player, String host, String availability) { return player + " has joined <@" + host + ">'s room! This run currently " + availability; }
     public static String notTheHost() { return "Only the host of the run has access to this command."; }
     public static String setHost(String player) { return player + " is now the host if the run. You are still in the run."; }
     public static String queueNoLongerActive() { return "The run you are attempting to join is no longer active"; }
     public static String noActiveRuns() { return "There are no active runs happening right now. Use `/host` to start a new run!"; }
     public static String noActiveRunsOfType(boolean ladder, String type) { return "There are no active " + getLadderString(ladder) + " " + type + "s right now. Use `/host` to start a new run!"; }
-
     public static String announcementMade(String channel) {
         return "This game has been announced in <#" + channel + ">.\n" +
                     "The Game Information will only be shared when people join your run.";
@@ -54,8 +55,8 @@ public class Responses {
         return "**ERROR**: "+msg+"\n"+
                 "Please report this error to the mod team with a screenshot if possible!";
     }
-    public static void amountOfActiveRuns(SlashCommandInteractionEvent event) {
-        if (BOT.getParticipants().size() == 0) { event.reply(noActiveRuns()).setEphemeral(true).queue(); return; }
+    public static void amountOfActiveRuns(InteractionHook event) {
+        if (BOT.getParticipants().size() == 0) { event.sendMessage(noActiveRuns()).setEphemeral(true).queue(); return; }
         String ladder = "", nonladder = "", response = "";
         int laddercount = 0, nonladdercount = 0;
         Set<Button> ladderButtons = new HashSet<>(), nonLadderButtons = new HashSet<>();
@@ -81,14 +82,14 @@ public class Responses {
         }
         response += "Click the buttons below or use `/list` to see what runs are available for you to join!";
         if (ladderButtons.size() > 0 && nonLadderButtons.size() > 0) {
-            event.reply(response).addActionRow(ladderButtons).addActionRow(nonLadderButtons).setEphemeral(true).queue();
+            event.sendMessage(response).addActionRow(ladderButtons).addActionRow(nonLadderButtons).setEphemeral(true).queue();
             return;
         }
         if (ladderButtons.size() > 0) {
-            event.reply(response).addActionRow(ladderButtons).setEphemeral(true).queue();
+            event.sendMessage(response).addActionRow(ladderButtons).setEphemeral(true).queue();
             return;
         }
-        event.reply(response).addActionRow(nonLadderButtons).setEphemeral(true).queue();
+        event.sendMessage(response).addActionRow(nonLadderButtons).setEphemeral(true).queue();
     }
 
 
@@ -107,6 +108,7 @@ public class Responses {
         if (ladder) { return Button.success("ladder-judge-queue."+type, "L "+name); }
         return Button.primary("nonladder-judge-queue."+type, "NL "+name);
     }
+    public static Button listRunsButton(String id) { return Button.secondary("runs-judge-queue."+id, "View Runs"); }
 
 
 

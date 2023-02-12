@@ -67,9 +67,15 @@ public class Run {
         members.add(host);
     }
     public Integer getMemberCount() { return members.size(); }
+    public Integer getSpotsOpen() { return maxMembers - getMemberCount(); }
     public boolean isFull() {
         if (getMemberCount() >= maxMembers) { return true; }
         return false;
+    }
+    public String isFullAsString() {
+        if (getSpotsOpen() <= 0) { return "is full!"; }
+        if (getSpotsOpen() == 1) { return "has " + getSpotsOpen() + " spot available!"; }
+        return "has " + getSpotsOpen() + " spots available!";
     }
     public Set<Member> getMembers() { return members; }
     public void setGameName (String gameName) {

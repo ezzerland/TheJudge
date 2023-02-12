@@ -31,6 +31,7 @@ public class CmdHost {
 
     public CmdHost (ModalInteractionEvent event, boolean isNew) {
         Run run = BOT.getParticipants().get(event.getMember());
+        if (run == null) { return; }
         run.setGameName(event.getValue("gamename").getAsString());
         run.setPassword(event.getValue("password").getAsString());
         if (isNew) {
