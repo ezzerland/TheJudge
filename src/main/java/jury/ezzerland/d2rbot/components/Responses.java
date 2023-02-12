@@ -133,7 +133,8 @@ public class Responses {
             embed.addField("Game Name", run.getGameName(), false);
             embed.addField("Password", run.getPassword(), false);
         }
-        embed.addField("","Last Game Created " + run.lastAction() + " minutes ago", false);
+        if (run.lastAction() == 1) { embed.addField("","Last Game Created " + run.lastAction() + " minute ago", false); }
+        else { embed.addField("","Last Game Created " + run.lastAction() + " minutes ago", false); }
         embed.addField("**__Participants in this Run__**", "Count: "+run.getMemberCount()+"\n"+getParticipants(run),false);
         embed.setFooter("This run is hosted by " + run.getHost().getEffectiveName(), run.getHost().getAvatarUrl());
         return embed.build();
