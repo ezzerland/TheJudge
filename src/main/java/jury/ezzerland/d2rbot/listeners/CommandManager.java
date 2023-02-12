@@ -20,14 +20,20 @@ public class CommandManager extends ListenerAdapter {
     public void onReady(@NotNull ReadyEvent event) {
         List<CommandData> commandData = new ArrayList<>();
         commandData.add(Commands.slash("host", "Host a new run").addOptions(Responses.getRunTypeAsOption(), Responses.getLadderAsOption()));
-        commandData.add(Commands.slash("list", "Lists the current runs available to join").addOptions(Responses.getRunTypeAsOption(), Responses.getLadderAsOption()));
+        //commandData.add(Commands.slash("list", "Lists the current runs available to join").addOptions(Responses.getRunTypeAsOption(), Responses.getLadderAsOption()));
         commandData.add(Commands.slash("runs", "Lists the amount of runs currently active"));
+        commandData.add(Commands.slash("list", "Lists the amount of runs currently active"));
         commandData.add(Commands.slash("leave", "Leave the run you are currently in"));
+        commandData.add(Commands.slash("end", "Leave the run you are currently in"));
         commandData.add(Commands.slash("rename", "Update the game name and password for your current run"));
-        commandData.add(Commands.slash("kick", "Kick player by UID or list UID's of players in your run").addOptions(Responses.getKickOption()));
+        commandData.add(Commands.slash("kick", "List all players in your run with ability to kick"));
+        commandData.add(Commands.slash("remove", "List all players in your run with ability to kick"));
         commandData.add(Commands.slash("kickall", "Kick all players out of your current run, except you"));
         commandData.add(Commands.slash("broadcast", "Re-post the invite to join the run you are in"));
         commandData.add(Commands.slash("ng", "Automatically increment your game name run-001 to run-002 etc"));
+        commandData.add(Commands.slash("info", "List the information for the game you are currently in"));
+        commandData.add(Commands.slash("add", "Add someone to the run you are currently in").addOptions(Responses.getAddOption()));
+        commandData.add(Commands.slash("sethost", "Give host of your run to someone else").addOptions(Responses.getHostOption()));
         event.getJDA().updateCommands().addCommands(commandData).queue();
     }
 
@@ -39,21 +45,24 @@ public class CommandManager extends ListenerAdapter {
                 new CmdHost(event);
                 break;
             case "runs":
+            case "list":
                 new CmdRuns(event);
                 break;
-            case "list":
+            /*case "list":
                 new CmdList(event);
-                break;
+                break;*/
             case "listall":
                 new CmdListAll(event);
                 break;
             case "leave":
+            case "end":
                 new CmdLeave(event);
                 break;
             case "rename":
                 new CmdRename(event);
                 break;
             case "kick":
+            case "remove":
                 new CmdKick(event);
                 break;
             case "kickall":
@@ -64,6 +73,15 @@ public class CommandManager extends ListenerAdapter {
                 break;
             case "ng":
                 new CmdNextGame(event);
+                break;
+            case "info":
+                new CmdInfo(event);
+                break;
+            case "add":
+                new CmdAdd(event);
+                break;
+            case "sethost":
+                new CmdSetHost(event);
                 break;
             default :
                 //unknown command, do nothing

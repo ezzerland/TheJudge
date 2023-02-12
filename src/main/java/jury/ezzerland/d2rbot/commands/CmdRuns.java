@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class CmdRuns {
 
     public CmdRuns(SlashCommandInteractionEvent event) {
-        event.reply(Responses.amountOfActiveRuns()).setEphemeral(true).queue();
+        //migrated to responses to keep all language in that location and avoid doubling iterations
+        Responses.amountOfActiveRuns(event);
+        //event.reply(Responses.amountOfActiveRuns()).setEphemeral(true).queue();
     }
 }

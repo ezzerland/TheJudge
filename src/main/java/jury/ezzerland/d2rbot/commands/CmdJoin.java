@@ -29,6 +29,6 @@ public class CmdJoin {
             return;
         }
         BOT.getParticipants().put(event.getMember(), run);
-        event.replyEmbeds(Responses.joinedGame(run)).setEphemeral(true).queue();
+        event.replyEmbeds(Responses.gameInfo(run, false)).addActionRow(Responses.nextGameButton(event.getMember().getId()), Responses.broadcastButton(event.getMember().getId()), Responses.gameInfoButton(event.getMember().getId()), Responses.leaveButton(event.getMember().getId())).setEphemeral(true).queue();
     }
 }

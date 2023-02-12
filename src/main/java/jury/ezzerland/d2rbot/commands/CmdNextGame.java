@@ -16,12 +16,12 @@ public class CmdNextGame {
             return;
         }
         Run run = BOT.getParticipants().get(event.getMember());
-        if (!run.getHost().equals(event.getMember())) {
+        /*if (!run.getHost().equals(event.getMember())) {
             event.reply(Responses.notTheHost()).setEphemeral(true).queue();
             return;
-        }
+        }*/
         run.setGameName(increment(run.getGameName()));
-        event.reply(Responses.renamedRun()).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
+        event.reply(Responses.renamedRun(run.getGameName())).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
     }
 
     public CmdNextGame(ButtonInteractionEvent event) {
@@ -30,12 +30,12 @@ public class CmdNextGame {
             return;
         }
         Run run = BOT.getParticipants().get(event.getMember());
-        if (!run.getHost().equals(event.getMember())) {
+        /*if (!run.getHost().equals(event.getMember())) {
             event.reply(Responses.notTheHost()).setEphemeral(true).queue();
             return;
-        }
+        }*/
         run.setGameName(increment(run.getGameName()));
-        event.reply(Responses.renamedRun()).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
+        event.reply(Responses.renamedRun(run.getGameName())).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
     }
 
 

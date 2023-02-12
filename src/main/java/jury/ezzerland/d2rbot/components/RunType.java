@@ -5,8 +5,8 @@ public enum RunType {
     BAAL(0),
     CHAOS(1),
     TERRORZONE(2),
-    COW(3),
-    MAGICFIND(4);
+    MAGICFIND(3),
+    PVP(4);
 
     private final int number;
 
@@ -24,8 +24,8 @@ public enum RunType {
             case TERRORZONE:
                 asString = "TZ Run";
                 break;
-            case COW:
-                asString = "Cow Run";
+            case PVP:
+                asString = "PvP Game";
                 break;
             case MAGICFIND:
                 asString = "MF Run";

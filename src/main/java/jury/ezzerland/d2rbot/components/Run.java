@@ -23,7 +23,6 @@ public class Run {
         members = new HashSet<>();
         setHost(host);
         addMember(host);
-        updateLastAction();
     }
 
     public void broadcastRun(boolean isNew) {
@@ -33,8 +32,10 @@ public class Run {
 
     public TextChannel getChannel() {
         if (ladder) {
+            if (getType().equals(RunType.PVP)) { return BOT.getShardManager().getTextChannelById(BOT.getConfig().get("PVP_LADDER_CHANNEL")); }
             return BOT.getShardManager().getTextChannelById(BOT.getConfig().get("LADDER_CHANNEL"));
         } else {
+            if (getType().equals(RunType.PVP)) { return BOT.getShardManager().getTextChannelById(BOT.getConfig().get("PVP_NONLADDER_CHANNEL")); }
             return BOT.getShardManager().getTextChannelById(BOT.getConfig().get("NONLADDER_CHANNEL"));
         }
     }
@@ -50,21 +51,20 @@ public class Run {
     public boolean addMember(Member member) {
         if (members.size() >= maxMembers) { return false; }
         members.add(member);
-        updateLastAction();
         return true;
     }
     public void removeMember(Member member) {
         members.remove(member);
         BOT.getParticipants().remove(member);
-        updateLastAction();
     }
     public void kickAllMembers() {
         for (Member member : members) {
             if (!member.equals(getHost())) {
-                removeMember(member);
+                BOT.getParticipants().remove(member);
             }
         }
-        updateLastAction();
+        members.clear();
+        members.add(host);
     }
     public Integer getMemberCount() { return members.size(); }
     public boolean isFull() {
@@ -72,9 +72,13 @@ public class Run {
         return false;
     }
     public Set<Member> getMembers() { return members; }
-    public void setGameName (String gameName) { this.gameName = gameName; updateLastAction(); }
+    public void setGameName (String gameName) {
+        if (renameIsOnCooldown()) { return; }
+        this.gameName = gameName;
+        updateLastAction();
+    }
     public String getGameName() { return gameName; }
-    public void setPassword (String password) { this.password = password; updateLastAction(); }
+    public void setPassword (String password) { this.password = password; }
     public String getPassword() { return password; }
     public void setLadder(boolean ladder) { this.ladder = ladder; }
     public boolean isLadder() { return ladder; }
@@ -89,7 +93,13 @@ public class Run {
     }
     public void updateLastAction() { lastAction = System.nanoTime(); }
     public boolean hasExpired() {
-        if (TimeUnit.NANOSECONDS.toHours(System.nanoTime()-lastAction) >= 2) { return true; }
+        if (getType().equals(RunType.PVP) && lastAction() >= 120) { return true; }
+        if (!getType().equals(RunType.PVP) && lastAction() >= 60) { return true; }
         return false;
+    }
+    public long lastAction() { return TimeUnit.NANOSECONDS.toMinutes(System.nanoTime()-lastAction); }
+    public boolean renameIsOnCooldown() {
+        if (TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()-lastAction) > 30) { return false; }
+        return true;
     }
 }

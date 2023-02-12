@@ -12,16 +12,24 @@ import java.util.Set;
 
 import static jury.ezzerland.d2rbot.TheJudge.BOT;
 
-public class CmdKick {
+public class CmdInfo {
+    public CmdInfo (SlashCommandInteractionEvent event) {
+        if (!BOT.getParticipants().containsKey(event.getMember())) {
+            event.reply(Responses.notInQueue()).setEphemeral(true).queue();
+            return;
+        }
+        Run run = BOT.getParticipants().get(event.getMember());
+        event.replyEmbeds(Responses.gameInfo(run, false)).setEphemeral(true).queue();
+    }
 
-    public CmdKick(SlashCommandInteractionEvent event) {
+    public CmdInfo (ButtonInteractionEvent event) {
         if (!BOT.getParticipants().containsKey(event.getMember())) {
             event.reply(Responses.notInQueue()).setEphemeral(true).queue();
             return;
         }
         Run run = BOT.getParticipants().get(event.getMember());
         if (!run.getHost().equals(event.getMember())) {
-            event.reply(Responses.notTheHost()).setEphemeral(true).queue();
+            event.replyEmbeds(Responses.gameInfo(run, false)).setEphemeral(true).queue();
             return;
         }
         Set<Button> buttonsOne = new HashSet<>(), buttonsTwo = new HashSet<>();
@@ -44,28 +52,5 @@ public class CmdKick {
             return;
         }
         event.replyEmbeds(Responses.gameInfo(run, false)).setEphemeral(true).queue();
-    }
-
-    public CmdKick (ButtonInteractionEvent event, String user) {
-        Member kicking = event.getGuild().getMemberById(user);
-        if (kicking == null) {
-            event.reply(Responses.errorMessage("Unable to identify kicked user - " + user)).setEphemeral(true).queue();
-            return;
-        }
-        if (!BOT.getParticipants().containsKey(event.getMember())) {
-            event.reply(Responses.notInQueue()).setEphemeral(true).queue();
-            return;
-        }
-        Run run = BOT.getParticipants().get(event.getMember());
-        if (!run.getHost().equals(event.getMember())) {
-            event.reply(Responses.notTheHost()).setEphemeral(true).queue();
-            return;
-        }
-        if (!run.getMembers().contains(kicking)) {
-            event.reply(Responses.kickedNotInRun(kicking.getEffectiveName())).setEphemeral(true).queue();
-            return;
-        }
-        run.removeMember(kicking);
-        event.reply(Responses.kickedPlayer(kicking.getEffectiveName())).setEphemeral(true).queue();
     }
 }
