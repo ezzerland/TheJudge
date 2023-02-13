@@ -53,4 +53,22 @@ public class CmdInfo {
         }
         event.replyEmbeds(Responses.gameInfo(run, false)).setEphemeral(true).queue();
     }
+
+    public CmdInfo (ButtonInteractionEvent event, String user) {
+        Member host = event.getGuild().getMemberById(user);
+        if (host == null) {
+            event.reply(Responses.errorMessage("Unable to identify game host - " + user)).setEphemeral(true).queue();
+            return;
+        }
+        if (!BOT.getParticipants().containsKey(host)) {
+            event.reply(Responses.queueNoLongerActive()).setEphemeral(true).queue();
+            return;
+        }
+        Run run = BOT.getParticipants().get(host);
+        if (run.isFull()) {
+            event.replyEmbeds(Responses.gameInfo(run, true)).setEphemeral(true).queue();
+        } else {
+            event.replyEmbeds(Responses.gameInfo(run, true)).addActionRow(Responses.joinButton(run.getHost().getId())).setEphemeral(true).queue();
+        }
+    }
 }

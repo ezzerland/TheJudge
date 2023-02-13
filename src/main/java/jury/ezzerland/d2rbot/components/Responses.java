@@ -3,8 +3,6 @@ package jury.ezzerland.d2rbot.components;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -103,27 +101,18 @@ public class Responses {
     public static Button nextGameButton(String id) { return Button.primary("nextgame-judge-queue."+id,"Next Game"); }
     public static Button kickPlayerButton(String id, String name) { return Button.danger("kick-judge-queue."+id,"Kick "+name); }
     public static Button gameInfoButton(String id) { return Button.secondary("info-judge-queue."+id, "Game Info"); }
+    public static Button getInfoButton(String id) { return Button.secondary("game-judge-queue."+id, "Game Info"); }
     public static Button renameGameButton(String id) { return Button.primary("rename-judge-queue."+id, "Rename Game"); }
     public static Button listButton(boolean ladder, String type, String name) {
         if (ladder) { return Button.success("ladder-judge-queue."+type, "L "+name); }
         return Button.primary("nonladder-judge-queue."+type, "NL "+name);
     }
-    public static Button listRunsButton(String id) { return Button.secondary("runs-judge-queue."+id, "View Runs"); }
+    public static Button listRunsButton(String id) { return Button.primary("runs-judge-queue."+id, "View Runs"); }
 
 
 
 
     //========= EMBEDS
-    /*public static MessageEmbed joinedGame(Run run) {
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("You have joined a " + run.getLadderAsString() + " " + run.getTypeAsString());
-        embed.setColor(Color.GREEN);
-        embed.addField("Game Name",run.getGameName(), false);
-        embed.addField("Password",run.getPassword(), false);
-        embed.addField("**__Participants in this Run__**", "Count: "+run.getMemberCount()+"\n"+getParticipants(run),false);
-        embed.setFooter("This run is hosted by " + run.getHost().getEffectiveName(), run.getHost().getAvatarUrl());
-        return embed.build();
-    }*/
     public static MessageEmbed gameInfo(Run run, boolean isList) {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle(run.getLadderAsString() + " " + run.getTypeAsString());
@@ -139,19 +128,6 @@ public class Responses {
         embed.setFooter("This run is hosted by " + run.getHost().getEffectiveName(), run.getHost().getAvatarUrl());
         return embed.build();
     }
-    /*public static MessageEmbed canJoinGame(Run run) {
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle(run.getLadderAsString() + " " + run.getTypeAsString());
-        if (run.isFull()) {
-            embed.setColor(Color.RED);
-        }
-        else {
-            embed.setColor(Color.GREEN);
-        }
-        embed.addField("**__Participants in this Run__**", "Count: "+run.getMemberCount()+"\n"+getParticipants(run),false);
-        embed.setFooter("This run is hosted by " + run.getHost().getEffectiveName(), run.getHost().getAvatarUrl());
-        return embed.build();
-    }*/
     public static MessageEmbed announceNewRun(String user, String ladder, String type, boolean isNew) {
         EmbedBuilder embed = new EmbedBuilder();
         if (isNew) { embed.setTitle("A new " + ladder + " " + type + " has started!"); }
@@ -174,14 +150,6 @@ public class Responses {
                 "**/kickall** will kick all players except for you from your run.",false);
         return embed.build();
     }
-
-    /*public static MessageEmbed kickMenu(Run run) {
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("Your " + run.getLadderAsString() + " " + run.getTypeAsString());
-        embed.setColor(Color.BLACK);
-        embed.addField("**__Participants in this Run__**", getParticipants(run),false);
-        return embed.build();
-    }*/
 
 
 
