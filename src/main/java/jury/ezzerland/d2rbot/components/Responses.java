@@ -40,6 +40,7 @@ public class Responses {
     public static String joinedQueue(String player, String host, String availability) { return player + " has joined <@" + host + ">'s room! This run currently " + availability; }
     public static String notTheHost() { return "Only the host of the run has access to this command."; }
     public static String setHost(String player) { return player + " is now the host if the run. You are still in the run."; }
+    public static String failedToHost() { return "Operation Failed. Please try again!"; }
     public static String queueNoLongerActive() { return "The run you are attempting to join is no longer active"; }
     public static String noActiveRuns() { return "There are no active runs happening right now. Use `/host` to start a new run!"; }
     public static String noActiveRunsOfType(boolean ladder, String type) { return "There are no active " + getLadderString(ladder) + " " + type + "s right now. Use `/host` to start a new run!"; }

@@ -11,7 +11,6 @@ import static jury.ezzerland.d2rbot.TheJudge.BOT;
 
 public class CmdHost {
     public CmdHost(SlashCommandInteractionEvent event) {
-
         if (BOT.getParticipants().containsKey(event.getMember())) {
             event.reply(Responses.alreadyInQueue()).addActionRow(Responses.leaveButton(event.getMember().getId())).setEphemeral(true).queue();
             return;
@@ -26,12 +25,19 @@ public class CmdHost {
         } else {
             BOT.getNonLadder().get(type).add(run);
         }
+        if (!BOT.getParticipants().containsKey(event.getMember())) {
+            event.reply(Responses.failedToHost()).setEphemeral(true).queue();
+            return;
+        }
         event.replyModal(Responses.getGameInfoModal(true)).queue();
     }
 
     public CmdHost (ModalInteractionEvent event, boolean isNew) {
         Run run = BOT.getParticipants().get(event.getMember());
-        if (run == null) { return; }
+        if (run == null) {
+            event.reply(Responses.failedToHost()).setEphemeral(true).queue();
+            return;
+        }
         run.setGameName(event.getValue("gamename").getAsString());
         run.setPassword(event.getValue("password").getAsString());
         if (isNew) {
