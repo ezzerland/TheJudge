@@ -3,7 +3,6 @@ package jury.ezzerland.d2rbot.commands;
 import jury.ezzerland.d2rbot.components.Responses;
 import jury.ezzerland.d2rbot.components.Run;
 import jury.ezzerland.d2rbot.components.RunType;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 import java.util.HashSet;
