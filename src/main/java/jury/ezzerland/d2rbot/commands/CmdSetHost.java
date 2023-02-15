@@ -28,6 +28,7 @@ public class CmdSetHost {
             return;
         }
         run.setHost(member);
+        run.getChannel().sendMessage(Responses.changedHost(event.getMember().getEffectiveName(), member.getId())).queue();
         event.reply(Responses.setHost(member.getEffectiveName())).addActionRow(Responses.leaveButton(event.getMember().getId())).setEphemeral(true).queue();
     }
 }

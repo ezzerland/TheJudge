@@ -26,8 +26,9 @@ public class Responses {
     public static String notInQueue() { return "You are not currently participating in a run."; }
     public static String notInQueue(String player) { return player + "is not in this run and must be added first."; }
     public static String fullQueue() { return "This room is already full!"; }
-    public static String leftQueue() { return "You have left the run you were participating in."; }
-    public static String endQueue() { return "The run you were hosting has ended."; }
+    public static String joinedQueue(String player, String host, String availability) { return player + " has joined <@" + host + ">'s room! This run currently " + availability; }
+    public static String leftQueue(String player, String host, String availability) { return player + " has joined <@" + host + ">'s room! This run currently " + availability; }
+    public static String endQueue(String player) { return player + " has ended the run they were hosting."; }
     public static String addToQueue(String player) { return player + " has been added to your run."; }
     public static String kickedPlayer(String player) { return player + " has been removed from your run."; }
     public static String kickedNotInRun(String player) { return player + " is not in your run and cannot be kicked."; }
@@ -37,9 +38,9 @@ public class Responses {
                 "`/broadcast` will announce your run as available to join.\n" +
                 "`/rename` will allow you to update the current game name and password for your run.";
     }
-    public static String joinedQueue(String player, String host, String availability) { return player + " has joined <@" + host + ">'s room! This run currently " + availability; }
     public static String notTheHost() { return "Only the host of the run has access to this command."; }
     public static String setHost(String player) { return player + " is now the host if the run. You are still in the run."; }
+    public static String changedHost(String player, String host) { return player + " has given host to <@" + host + ">."; }
     public static String failedToHost() { return "Operation Failed. Please try again!"; }
     public static String queueNoLongerActive() { return "The run you are attempting to join is no longer active"; }
     public static String noActiveRuns() { return "There are no active runs happening right now. Use `/host` to start a new run!"; }
