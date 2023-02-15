@@ -26,7 +26,7 @@ public class Run {
     }
 
     public void broadcastRun(boolean isNew) {
-        getChannel().sendMessageEmbeds(Responses.announceNewRun(getHost().getEffectiveName(), getLadderAsString(),getTypeAsString(), isNew)).addActionRow(Responses.joinButton(getHost().getId())).queue();
+        getChannel().sendMessageEmbeds(Responses.announceNewRun(getHost().getEffectiveName(), getLadderAsString(),getTypeAsString(), isNew)).addActionRow(Responses.joinButton(getHost().getId()), Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue();
         updateLastAction();
     }
 

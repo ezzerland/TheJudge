@@ -15,7 +15,7 @@ import static jury.ezzerland.d2rbot.TheJudge.BOT;
 public class CmdInfo {
     public CmdInfo (SlashCommandInteractionEvent event) {
         if (!BOT.getParticipants().containsKey(event.getMember())) {
-            event.reply(Responses.notInQueue()).setEphemeral(true).queue();
+            event.reply(Responses.notInQueue()).addActionRow(Responses.listRunsButton(event.getMember().getId())).setEphemeral(true).queue();
             return;
         }
         Run run = BOT.getParticipants().get(event.getMember());

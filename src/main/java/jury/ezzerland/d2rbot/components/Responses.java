@@ -122,6 +122,8 @@ public class Responses {
         if (!isList) {
             embed.addField("Game Name", run.getGameName(), false);
             embed.addField("Password", run.getPassword(), false);
+        } else {
+            embed.addField("", "Click Join to get the game name and password for this run!", false);
         }
         if (run.lastAction() == 1) { embed.addField("","Last Game Created " + run.lastAction() + " minute ago", false); }
         else { embed.addField("","Last Game Created " + run.lastAction() + " minutes ago", false); }
