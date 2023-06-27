@@ -5,7 +5,6 @@ import jury.ezzerland.d2rbot.components.Run;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-import net.dv8tion.jda.api.interactions.InteractionHook;
 
 import static jury.ezzerland.d2rbot.TheJudge.BOT;
 
@@ -16,8 +15,8 @@ public class CmdLeave {
             event.reply(Responses.notInQueue()).addActionRow(Responses.listRunsButton(event.getMember().getId())).setEphemeral(true).queue();
             return;
         }
-        event.deferReply().queue();
-        leaveCommand(event.getHook(), event.getMember());
+        event.reply(Responses.leftQueue()).setEphemeral(true).queue();
+        leaveCommand(event.getMember());
     }
 
     public CmdLeave (SlashCommandInteractionEvent event) {
@@ -25,19 +24,19 @@ public class CmdLeave {
             event.reply(Responses.notInQueue()).addActionRow(Responses.listRunsButton(event.getMember().getId())).setEphemeral(true).queue();
             return;
         }
-        event.deferReply().queue();
-        leaveCommand(event.getHook(), event.getMember());
+        event.reply(Responses.leftQueue()).setEphemeral(true).queue();
+        leaveCommand(event.getMember());
     }
 
-    private void leaveCommand(InteractionHook event, Member member) {
+    private void leaveCommand(Member member) {
         Run run = BOT.getParticipants().get(member);
         if (run.getHost().equals(member)) {
             run.endRun();
-            event.sendMessage(Responses.endQueue(member.getEffectiveName())).queue();
+            run.getChannel().sendMessage(Responses.endQueue(member.getEffectiveName())).queue();
             return;
         }
         run.removeMember(member);
-        event.sendMessage(Responses.leftQueue(member.getEffectiveName(), run.getHost().getEffectiveName(), run.isFullAsString())).addActionRow(Responses.joinButton(run.getHost().getId()), Responses.getInfoButton(run.getHost().getId()), Responses.listRunsButton(run.getHost().getId())).queue();
+        run.getChannel().sendMessage(Responses.leftQueue(member.getEffectiveName(), run.getHost().getEffectiveName(), run.isFullAsString(), run.getTypeAsString())).addActionRow(Responses.joinButton(run.getHost().getId()), Responses.getInfoButton(run.getHost().getId()), Responses.listRunsButton(run.getHost().getId())).queue();
     }
 
 

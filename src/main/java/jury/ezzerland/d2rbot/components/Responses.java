@@ -26,8 +26,9 @@ public class Responses {
     public static String notInQueue() { return "You are not currently participating in a run."; }
     public static String notInQueue(String player) { return player + "is not in this run and must be added first."; }
     public static String fullQueue() { return "This room is already full!"; }
-    public static String joinedQueue(String player, String host, String availability) { return player + " has joined <@" + host + ">'s room! This run currently " + availability; }
-    public static String leftQueue(String player, String host, String availability) { return player + " has joined <@" + host + ">'s room! This run currently " + availability; }
+    public static String joinedQueue(String player, String host, String availability, String type) { return player + " has joined <@" + host + ">'s " + type + "! This run currently " + availability; }
+    public static String leftQueue(String player, String host, String availability, String type) { return player + " has left " + host + "'s " + type + "! This run currently " + availability; }
+    public static String leftQueue() { return "You have left the queue."; }
     public static String endQueue(String player) { return player + " has ended the run they were hosting."; }
     public static String addToQueue(String player) { return player + " has been added to your run."; }
     public static String kickedPlayer(String player) { return player + " has been removed from your run."; }
@@ -39,7 +40,7 @@ public class Responses {
                 "`/rename` will allow you to update the current game name and password for your run.";
     }
     public static String notTheHost() { return "Only the host of the run has access to this command."; }
-    public static String setHost(String player) { return player + " is now the host if the run. You are still in the run."; }
+    public static String setHost(String player) { return player + " is now the host of the run. You are still in the run."; }
     public static String changedHost(String player, String host) { return player + " has given host to <@" + host + ">."; }
     public static String failedToHost() { return "Operation Failed. Please try again!"; }
     public static String queueNoLongerActive() { return "The run you are attempting to join is no longer active"; }
@@ -117,7 +118,7 @@ public class Responses {
     //========= EMBEDS
     public static MessageEmbed gameInfo(Run run, boolean isList) {
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle(run.getLadderAsString() + " " + run.getTypeAsString());
+        embed.setTitle(run.getHost().getEffectiveName() + " - " + run.getLadderAsString() + " " + run.getTypeAsString());
         if (run.isFull()) { embed.setColor(Color.RED); }
         else { embed.setColor(Color.GREEN); }
         if (!isList) {
@@ -134,8 +135,8 @@ public class Responses {
     }
     public static MessageEmbed announceNewRun(String user, String ladder, String type, boolean isNew) {
         EmbedBuilder embed = new EmbedBuilder();
-        if (isNew) { embed.setTitle("A new " + ladder + " " + type + " has started!"); }
-        else { embed.setTitle("A " + ladder + " " + type + " is ongoing!"); }
+        if (isNew) { embed.setTitle(user + " is hosting a new " + ladder + " " + type + "!"); }
+        else { embed.setTitle(user + " has a " + ladder + " " + type + " ongoing!"); }
         embed.setColor(Color.CYAN);
         embed.addField("**__How to join__**", "Simply click the Join Button!\nGame information will be sent to you upon joining.",false);
         embed.setFooter("This run is hosted by " + user);

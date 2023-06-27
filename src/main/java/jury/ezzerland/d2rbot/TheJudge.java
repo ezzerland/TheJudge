@@ -1,6 +1,5 @@
 package jury.ezzerland.d2rbot;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import jury.ezzerland.d2rbot.components.Run;
 import jury.ezzerland.d2rbot.components.RunType;
 import jury.ezzerland.d2rbot.listeners.ButtonManager;
@@ -25,16 +24,13 @@ public class TheJudge {
 
     public static TheJudge BOT;
     private final ShardManager shardManager;
-    private final Dotenv config;
     private Map<Member, Run> participants;
     private Map<RunType, Set<Run>> ladder, nonladder;
-    private String BOT_ACTIVITY = "/runs";
 
     public TheJudge() throws LoginException {
-        config = Dotenv.configure().load();
-        DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(config.get("TOKEN"))
+        DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(Environment.TOKEN)
                 .setStatus(OnlineStatus.ONLINE)
-                .setActivity(Activity.playing(BOT_ACTIVITY))
+                .setActivity(Activity.playing(Environment.BOT_ACTIVITY))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setChunkingFilter(ChunkingFilter.ALL);
@@ -59,7 +55,6 @@ public class TheJudge {
     }
 
     public ShardManager getShardManager() { return shardManager; }
-    public Dotenv getConfig() { return config; }
     public Map<Member, Run> getParticipants() { return participants; }
     public Map<RunType, Set<Run>> getLadder() { return ladder; }
     public Map<RunType, Set<Run>> getNonLadder() { return nonladder; }

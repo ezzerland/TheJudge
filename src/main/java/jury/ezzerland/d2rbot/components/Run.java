@@ -1,5 +1,6 @@
 package jury.ezzerland.d2rbot.components;
 
+import jury.ezzerland.d2rbot.Environment;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
@@ -32,11 +33,11 @@ public class Run {
 
     public TextChannel getChannel() {
         if (ladder) {
-            if (getType().equals(RunType.PVP)) { return BOT.getShardManager().getTextChannelById(BOT.getConfig().get("PVP_LADDER_CHANNEL")); }
-            return BOT.getShardManager().getTextChannelById(BOT.getConfig().get("LADDER_CHANNEL"));
+            if (getType().equals(RunType.PVP)) { return BOT.getShardManager().getTextChannelById(Environment.PVP_LADDER_CHANNEL); }
+            return BOT.getShardManager().getTextChannelById(Environment.LADDER_CHANNEL);
         } else {
-            if (getType().equals(RunType.PVP)) { return BOT.getShardManager().getTextChannelById(BOT.getConfig().get("PVP_NONLADDER_CHANNEL")); }
-            return BOT.getShardManager().getTextChannelById(BOT.getConfig().get("NONLADDER_CHANNEL"));
+            if (getType().equals(RunType.PVP)) { return BOT.getShardManager().getTextChannelById(Environment.PVP_NONLADDER_CHANNEL); }
+            return BOT.getShardManager().getTextChannelById(Environment.NONLADDER_CHANNEL);
         }
     }
     public String getLadderAsString() {
