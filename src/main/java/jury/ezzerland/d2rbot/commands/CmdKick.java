@@ -16,12 +16,12 @@ public class CmdKick {
             return;
         }
         Run run = BOT.getParticipants().get(event.getMember());
-        if (!run.getHost().equals(event.getMember())) {
+        /*if (!run.getHost().equals(event.getMember())) {
             event.reply(Responses.notTheHost()).setEphemeral(true).queue();
             return;
-        }
+        }*/
         event.deferReply().setEphemeral(true).queue();
-        new CmdInfo(event.getHook(), event.getMember(), event.getMember());
+        new CmdInfo(event.getHook(), event.getMember(), run.getHost());
     }
 
     public CmdKick (ButtonInteractionEvent event, String user) {
@@ -35,8 +35,16 @@ public class CmdKick {
             return;
         }
         Run run = BOT.getParticipants().get(event.getMember());
-        if (!run.getHost().equals(event.getMember())) {
+        /*if (!run.getHost().equals(event.getMember())) {
             event.reply(Responses.notTheHost()).setEphemeral(true).queue();
+            return;
+        }*/
+        if (run.getHost().equals(kicking)) {
+            event.reply(Responses.cannotKickHost()).setEphemeral(true).queue();
+            return;
+        }
+        if (run.getHost().equals(event.getMember())) {
+            event.reply(Responses.cannotKickSelf()).setEphemeral(true).queue();
             return;
         }
         if (!run.getMembers().contains(kicking)) {

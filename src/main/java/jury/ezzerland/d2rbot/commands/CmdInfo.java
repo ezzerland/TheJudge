@@ -49,14 +49,14 @@ public class CmdInfo {
     public CmdInfo (InteractionHook event, Member player, Member host) {
         Run run = BOT.getParticipants().get(host);
         if (run.getMembers().contains(player)) {
-            if (!run.getHost().equals(player)) {
+            /*if (!run.getHost().equals(player)) {
                 event.sendMessageEmbeds(Responses.gameInfo(run, false)).addActionRow(Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).setEphemeral(true).queue();
                 return;
-            }
+            }*/
             Set<Button> buttonsOne = new HashSet<>(), buttonsTwo = new HashSet<>();
             int i = 0;
             for (Member member : run.getMembers()) {
-                if (run.getHost().equals(member)) {
+                if (run.getHost().equals(member) || run.getHost().equals(player)) { // can't kick yourself or the host
                     continue;
                 }
                 if (i <= 3) {

@@ -39,6 +39,8 @@ public class Responses {
                 "`/broadcast` will announce your run as available to join.\n" +
                 "`/rename` will allow you to update the current game name and password for your run.";
     }
+    public static String cannotKickHost() { return "The host cannot be kicked until a new host has been set."; }
+    public static String cannotKickSelf() { return "You cannot kick yourself from a match. Please use /leave"; }
     public static String notTheHost() { return "Only the host of the run has access to this command."; }
     public static String setHost(String player) { return player + " is now the host of the run. You are still in the run."; }
     public static String changedHost(String player, String host) { return player + " has given host to <@" + host + ">."; }
