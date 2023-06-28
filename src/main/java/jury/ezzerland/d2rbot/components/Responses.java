@@ -99,7 +99,12 @@ public class Responses {
 
 
     //========= BUTTONS
-    public static Button joinButton(String id) { return Button.success("join-judge-queue."+id, "Join Run"); }
+    public static Button joinButton (String id) { return joinButton(id, false); }
+    public static Button joinButton(String id, boolean rsvp) {
+        String label = "Join Run";
+        if (rsvp) { label = "RSVP"; }
+        return Button.success("join-judge-queue."+id, label);
+    }
     public static Button leaveButton(String id) { return Button.danger("leave-judge-queue."+id, "Leave Run"); }
     public static Button endRunButton(String id) { return Button.danger("leave-judge-queue."+id,"End Run"); }
     public static Button broadcastButton(String id) { return Button.secondary("broadcast-judge-queue."+id,"Broadcast Run"); }
@@ -135,12 +140,24 @@ public class Responses {
         embed.setFooter("This run is hosted by " + run.getHost().getEffectiveName(), run.getHost().getAvatarUrl());
         return embed.build();
     }
-    public static MessageEmbed announceNewRun(String user, String ladder, String type, boolean isNew) {
+    public static MessageEmbed announceNewRun(String user, String ladder, String type, boolean isNew, boolean isRsvp) {
         EmbedBuilder embed = new EmbedBuilder();
-        if (isNew) { embed.setTitle(user + " is hosting a new " + ladder + " " + type + "!"); }
-        else { embed.setTitle(user + " has a " + ladder + " " + type + " ongoing!"); }
-        embed.setColor(Color.CYAN);
-        embed.addField("**__How to join__**", "Simply click the Join Button!\nGame information will be sent to you upon joining.",false);
+        if (isRsvp) {
+            if (isNew) { embed.setTitle(user + " is hosting an upcoming " + ladder + " " + type + "!"); }
+            else { embed.setTitle(user + " has an upcoming " + ladder + " " + type + "!"); }
+        }
+        else {
+            if (isNew) { embed.setTitle(user + " is hosting a new " + ladder + " " + type + "!"); }
+            else { embed.setTitle(user + " has a " + ladder + " " + type + " ongoing!"); }
+        }
+        if (isRsvp) {
+            embed.setColor(Color.MAGENTA);
+            embed.addField("**__RSVP NOW__**", "Simply click the RSVP Button!\nGame information will be sent to you upon joining.\nA reminder will go out 5 minutes prior to the start of the run!",false);
+        }
+        else {
+            embed.setColor(Color.CYAN);
+            embed.addField("**__How to join__**", "Simply click the Join Button!\nGame information will be sent to you upon joining.",false);
+        }
         embed.setFooter("This run is hosted by " + user);
         return embed.build();
     }
@@ -155,6 +172,21 @@ public class Responses {
                 "**/ng** automatically increments game run-001 to run-002 etc.\n" +
                 "**/kick** Kick player by UID or list UID's of players in your run.\n" +
                 "**/kickall** will kick all players except for you from your run.",false);
+        embed.addField("**__NOTE__**", "As the host, your focus should be on the runs.\n" +
+                "Anyone in the run can do **/ng** or kick players that did not leave.\n" +
+                "For the best experience, ask someone in your run to do these tasks!",false);
+        return embed.build();
+    }
+    public static MessageEmbed publishRun(Run run, String user, String ladder, String type) {
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setTitle(user + " has a " + ladder + " " + type + " beginning now!");
+        embed.addField("**__Participants__**", getParticipants(run, true),false);
+        if (!run.isFull()) {
+            embed.setColor(Color.GREEN);
+            embed.addField("**__How to join__**", "Simply click the Join Button!\nGame information will be sent to you upon joining.",false);
+        }
+        else { embed.setColor(Color.RED); }
+        embed.setFooter("This run is hosted by " + user);
         return embed.build();
     }
 
@@ -174,6 +206,11 @@ public class Responses {
         return new OptionData(OptionType.STRING, "ladder", "Is this a ladder or non-ladder game?", true)
                 .addChoice("Ladder", "true")
                 .addChoice("Non-Ladder", "false");
+    }
+    public static OptionData getRsvpAsOption() {
+        return new OptionData(OptionType.STRING, "rsvp", "Will this run start at the beginning of the next hour?", true)
+                .addChoice("Yes", "true")
+                .addChoice("No", "false");
     }
     public static OptionData getAddOption() {
         return new OptionData(OptionType.USER, "tag", "Discord @tag of the person you are adding", true);
@@ -220,11 +257,17 @@ public class Responses {
         return "Non-Ladder";
     }
 
-    private static String getParticipants(Run run) {
+    private static String getParticipants(Run run) { return getParticipants(run, false); }
+    private static String getParticipants(Run run, boolean useTags) {
         String participants = "";
         for (Member member : run.getMembers()) {
             if (!participants.equals("")) { participants += "\n"; }
-            participants += member.getEffectiveName();
+            if (useTags) {
+                participants += "<@" + member.getId() + ">";
+            }
+            else {
+                participants += member.getEffectiveName();
+            }
         }
         return participants;
     }

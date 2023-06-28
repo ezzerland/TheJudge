@@ -19,6 +19,7 @@ public class CmdHost {
         RunType type = RunType.valueOf(event.getOption("type").getAsString());
         run.setType(type);
         run.setLadder(Boolean.valueOf(event.getOption("ladder").getAsString()));
+        run.setRsvp(Boolean.valueOf(event.getOption("rsvp").getAsString()));
         BOT.getParticipants().put(event.getMember(), run);
         if (run.isLadder()) {
             BOT.getLadder().get(type).add(run);

@@ -4,8 +4,13 @@ import jury.ezzerland.d2rbot.Environment;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import static jury.ezzerland.d2rbot.TheJudge.BOT;
@@ -17,8 +22,21 @@ public class Run {
     private Set<Member> members;
     private Integer maxMembers = 8;
     private String gameName = "", password = "";
-    private boolean ladder = false;
+    private boolean ladder = false, rsvp = false;
     private long lastAction;
+    private Timer fiveMinuteReminder, fifteenMinuteReminder;
+
+    private TimerTask fiveMinuteReminderTask = new TimerTask() {
+        public void run() {
+            publishRun();
+        }
+    };
+
+    private TimerTask fifteenMinuteReminderTask = new TimerTask() {
+        public void run() {
+            if (!isFull()) { broadcastRun(false); }
+        }
+    };
 
     public Run(Member host) {
         members = new HashSet<>();
@@ -27,8 +45,16 @@ public class Run {
     }
 
     public void broadcastRun(boolean isNew) {
-        getChannel().sendMessageEmbeds(Responses.announceNewRun(getHost().getEffectiveName(), getLadderAsString(),getTypeAsString(), isNew)).addActionRow(Responses.joinButton(getHost().getId()), Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue();
+        getChannel().sendMessageEmbeds(Responses.announceNewRun(getHost().getEffectiveName(), getLadderAsString(),getTypeAsString(), isNew, isRsvp())).addActionRow(Responses.joinButton(getHost().getId(), isRsvp()), Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue();
         updateLastAction();
+        if (isNew && isRsvp()) { setUpTimers(); }
+    }
+
+    public void publishRun() {
+        if (!isFull()) { getChannel().sendMessageEmbeds(Responses.publishRun(this, getHost().getEffectiveName(), getLadderAsString(), getTypeAsString())).addActionRow(Responses.joinButton(getHost().getId()), Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue(); }
+        else { getChannel().sendMessageEmbeds(Responses.publishRun(this, getHost().getEffectiveName(), getLadderAsString(), getTypeAsString())).addActionRow(Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue(); }
+        updateLastAction();
+        setRsvp(false);
     }
 
     public TextChannel getChannel() {
@@ -89,6 +115,8 @@ public class Run {
     public String getPassword() { return password; }
     public void setLadder(boolean ladder) { this.ladder = ladder; }
     public boolean isLadder() { return ladder; }
+    public void setRsvp(boolean rsvp) { this.rsvp = rsvp; }
+    public boolean isRsvp() { return rsvp; }
     public void endRun() {
         kickAllMembers();
         BOT.getParticipants().remove(host);
@@ -100,6 +128,7 @@ public class Run {
     }
     public void updateLastAction() { lastAction = System.nanoTime(); }
     public boolean hasExpired() {
+        if (isRsvp()) { return false; }
         if (getType().equals(RunType.PVP) && lastAction() >= 120) { return true; }
         if (!getType().equals(RunType.PVP) && lastAction() >= 60) { return true; }
         return false;
@@ -108,5 +137,19 @@ public class Run {
     public boolean renameIsOnCooldown() {
         if (TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()-lastAction) > 30) { return false; }
         return true;
+    }
+
+    private void setUpTimers() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime nextHour = now.plusHours(1).truncatedTo(ChronoUnit.HOURS);
+        if (now.plusMinutes(15).isBefore(nextHour)) {
+            fifteenMinuteReminder.schedule(fifteenMinuteReminderTask, Duration.between(now, nextHour.minusMinutes(15)).toMillis());
+        }
+        if (now.plusMinutes(5).isBefore(nextHour)) {
+            fiveMinuteReminder.schedule(fiveMinuteReminderTask, Duration.between(now, nextHour.minusMinutes(5)).toMillis());
+        }
+        else {
+            publishRun();
+        }
     }
 }
