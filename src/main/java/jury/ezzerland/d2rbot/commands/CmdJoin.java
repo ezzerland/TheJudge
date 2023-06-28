@@ -29,8 +29,8 @@ public class CmdJoin {
             return;
         }
         BOT.getParticipants().put(event.getMember(), run);
-        if (run.isFull()) { run.getChannel().sendMessage(Responses.joinedQueue(event.getMember().getEffectiveName(), host.getId(), run.isFullAsString(), run.getTypeAsString())).addActionRow(Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).queue(); }
-        else { run.getChannel().sendMessage(Responses.joinedQueue(event.getMember().getEffectiveName(), host.getId(), run.isFullAsString(), run.getTypeAsString())).addActionRow(Responses.joinButton(host.getId()), Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).queue(); }
+        if (run.isFull()) { run.getChannel().sendMessage(Responses.joinedQueue(Responses.memberName(event.getMember()), host.getId(), run.isFullAsString(), run.getTypeAsString())).addActionRow(Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).queue(); }
+        else { run.getChannel().sendMessage(Responses.joinedQueue(Responses.memberName(event.getMember()), host.getId(), run.isFullAsString(), run.getTypeAsString())).addActionRow(Responses.joinButton(host.getId()), Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).queue(); }
         event.replyEmbeds(Responses.gameInfo(run, false)).addActionRow(Responses.nextGameButton(event.getMember().getId()), Responses.broadcastButton(event.getMember().getId()), Responses.gameInfoButton(event.getMember().getId()), Responses.leaveButton(event.getMember().getId())).setEphemeral(true).queue();
     }
 }

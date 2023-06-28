@@ -32,11 +32,11 @@ public class CmdLeave {
         Run run = BOT.getParticipants().get(member);
         if (run.getHost().equals(member)) {
             run.endRun();
-            run.getChannel().sendMessage(Responses.endQueue(member.getEffectiveName())).queue();
+            run.getChannel().sendMessage(Responses.endQueue(Responses.memberName(member))).queue();
             return;
         }
         run.removeMember(member);
-        run.getChannel().sendMessage(Responses.leftQueue(member.getEffectiveName(), run.getHost().getEffectiveName(), run.isFullAsString(), run.getTypeAsString())).addActionRow(Responses.joinButton(run.getHost().getId()), Responses.getInfoButton(run.getHost().getId()), Responses.listRunsButton(run.getHost().getId())).queue();
+        run.getChannel().sendMessage(Responses.leftQueue(Responses.memberName(member), run.getHost().getEffectiveName(), run.isFullAsString(), run.getTypeAsString())).addActionRow(Responses.joinButton(run.getHost().getId()), Responses.getInfoButton(run.getHost().getId()), Responses.listRunsButton(run.getHost().getId())).queue();
     }
 
 

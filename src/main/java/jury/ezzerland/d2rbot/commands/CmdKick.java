@@ -48,10 +48,10 @@ public class CmdKick {
             return;
         }
         if (!run.getMembers().contains(kicking)) {
-            event.reply(Responses.kickedNotInRun(kicking.getEffectiveName())).setEphemeral(true).queue();
+            event.reply(Responses.kickedNotInRun(Responses.memberName(kicking))).setEphemeral(true).queue();
             return;
         }
         run.removeMember(kicking);
-        event.reply(Responses.kickedPlayer(kicking.getEffectiveName())).setEphemeral(true).queue();
+        event.reply(Responses.kickedPlayer(Responses.memberName(kicking))).setEphemeral(true).queue();
     }
 }

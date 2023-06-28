@@ -21,12 +21,12 @@ public class CmdAdd {
             return;
         }
         if (BOT.getParticipants().containsKey(member)) {
-            event.reply(Responses.alreadyInQueue(member.getEffectiveName())).setEphemeral(true).queue();
+            event.reply(Responses.alreadyInQueue(Responses.memberName(member))).setEphemeral(true).queue();
             return;
         }
         Run run = BOT.getParticipants().get(event.getMember());
         if (run.addMember(member)) {
-            event.reply(Responses.addToQueue(member.getEffectiveName())).addActionRow(Responses.gameInfoButton(event.getMember().getId())).setEphemeral(true).queue();
+            event.reply(Responses.addToQueue(Responses.memberName(member))).addActionRow(Responses.gameInfoButton(event.getMember().getId())).setEphemeral(true).queue();
             return;
         }
         event.reply(Responses.fullQueue()).addActionRow(Responses.gameInfoButton(event.getMember().getId())).setEphemeral(true).queue();

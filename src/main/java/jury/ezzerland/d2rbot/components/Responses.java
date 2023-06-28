@@ -272,4 +272,11 @@ public class Responses {
         return participants;
     }
 
+    public static String memberName (Member member) {
+        if (member.getNickname() == null) {
+            return member.getEffectiveName();
+        }
+        return member.getNickname();
+    }
+
 }

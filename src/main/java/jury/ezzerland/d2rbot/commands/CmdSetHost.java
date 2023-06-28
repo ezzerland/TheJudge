@@ -24,11 +24,11 @@ public class CmdSetHost {
             return;
         }
         if (!run.getMembers().contains(member)) {
-            event.reply(Responses.notInQueue(member.getEffectiveName())).setEphemeral(true).queue();
+            event.reply(Responses.notInQueue(Responses.memberName(member))).setEphemeral(true).queue();
             return;
         }
         run.setHost(member);
-        run.getChannel().sendMessage(Responses.changedHost(event.getMember().getEffectiveName(), member.getId())).queue();
-        event.reply(Responses.setHost(member.getEffectiveName())).addActionRow(Responses.leaveButton(event.getMember().getId())).setEphemeral(true).queue();
+        run.getChannel().sendMessage(Responses.changedHost(Responses.memberName(event.getMember()), member.getId())).queue();
+        event.reply(Responses.setHost(Responses.memberName(member))).addActionRow(Responses.leaveButton(event.getMember().getId())).setEphemeral(true).queue();
     }
 }
