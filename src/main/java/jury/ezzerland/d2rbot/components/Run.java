@@ -25,18 +25,7 @@ public class Run {
     private boolean ladder = false, rsvp = false;
     private long lastAction;
     private Timer fiveMinuteReminder, fifteenMinuteReminder;
-
-    private TimerTask fiveMinuteReminderTask = new TimerTask() {
-        public void run() {
-            publishRun();
-        }
-    };
-
-    private TimerTask fifteenMinuteReminderTask = new TimerTask() {
-        public void run() {
-            if (!isFull()) { broadcastRun(false); }
-        }
-    };
+    private TimerTask fiveMinuteReminderTask, fifteenMinuteReminderTask;
 
     public Run(Member host) {
         members = new HashSet<>();
@@ -51,10 +40,11 @@ public class Run {
     }
 
     public void publishRun() {
-        if (!isFull()) { getChannel().sendMessageEmbeds(Responses.publishRun(this, getHost().getEffectiveName(), getLadderAsString(), getTypeAsString())).addActionRow(Responses.joinButton(getHost().getId()), Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue(); }
+        if (!isFull()) { getChannel().sendMessageEmbeds(Responses.publishRun(this, getHost().getEffectiveName(), getLadderAsString(), getTypeAsString())).addActionRow(Responses.joinButton(getHost().getId(), isRsvp()), Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue(); }
         else { getChannel().sendMessageEmbeds(Responses.publishRun(this, getHost().getEffectiveName(), getLadderAsString(), getTypeAsString())).addActionRow(Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue(); }
         updateLastAction();
         setRsvp(false);
+        cancelTimers();
     }
 
     public TextChannel getChannel() {
@@ -118,6 +108,7 @@ public class Run {
     public void setRsvp(boolean rsvp) { this.rsvp = rsvp; }
     public boolean isRsvp() { return rsvp; }
     public void endRun() {
+        if (isRsvp()) { cancelTimers(); }
         kickAllMembers();
         BOT.getParticipants().remove(host);
         if (isLadder()) {
@@ -139,7 +130,27 @@ public class Run {
         return true;
     }
 
+    public String timeTilStart() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime nextHour = now.plusHours(1).truncatedTo(ChronoUnit.HOURS);
+        return Duration.between(now, nextHour.minusMinutes(5)).toMinutes() + " Minutes";
+    }
+
     private void setUpTimers() {
+        fiveMinuteReminder = new Timer();
+        fifteenMinuteReminder = new Timer();
+        fiveMinuteReminderTask = new TimerTask() {
+            public void run() {
+                publishRun();
+                fiveMinuteReminder.cancel();
+            }
+        };
+        fifteenMinuteReminderTask = new TimerTask() {
+            public void run() {
+                if (!isFull()) { broadcastRun(false); }
+                fifteenMinuteReminder.cancel();
+            }
+        };
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime nextHour = now.plusHours(1).truncatedTo(ChronoUnit.HOURS);
         if (now.plusMinutes(15).isBefore(nextHour)) {
@@ -151,5 +162,11 @@ public class Run {
         else {
             publishRun();
         }
+    }
+    private void cancelTimers() {
+        fiveMinuteReminder.cancel();
+        fifteenMinuteReminder.cancel();
+        fiveMinuteReminderTask.cancel();
+        fifteenMinuteReminderTask.cancel();
     }
 }

@@ -36,7 +36,7 @@ public class CmdLeave {
             return;
         }
         run.removeMember(member);
-        run.getChannel().sendMessage(Responses.leftQueue(Responses.memberName(member), run.getHost().getEffectiveName(), run.isFullAsString(), run.getTypeAsString())).addActionRow(Responses.joinButton(run.getHost().getId()), Responses.getInfoButton(run.getHost().getId()), Responses.listRunsButton(run.getHost().getId())).queue();
+        run.getChannel().sendMessage(Responses.leftQueue(Responses.memberName(member), run.getHost().getEffectiveName(), run.isFullAsString(), run.getTypeAsString(), run.isRsvp())).addActionRow(Responses.joinButton(run.getHost().getId(), run.isRsvp()), Responses.getInfoButton(run.getHost().getId()), Responses.listRunsButton(run.getHost().getId())).queue();
     }
 
 

@@ -56,7 +56,7 @@ public class CmdInfo {
             Set<Button> buttonsOne = new HashSet<>(), buttonsTwo = new HashSet<>();
             int i = 0;
             for (Member member : run.getMembers()) {
-                if (run.getHost().equals(member) || run.getHost().equals(player)) { // can't kick yourself or the host
+                if (run.getHost().equals(member) || player.equals(member)) { // can't kick yourself or the host
                     continue;
                 }
                 if (i <= 3) {
@@ -80,7 +80,7 @@ public class CmdInfo {
             if (run.isFull()) {
                 event.sendMessageEmbeds(Responses.gameInfo(run, true)).addActionRow(Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).setEphemeral(true).queue();
             } else {
-                event.sendMessageEmbeds(Responses.gameInfo(run, true)).addActionRow(Responses.joinButton(run.getHost().getId()), Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).setEphemeral(true).queue();
+                event.sendMessageEmbeds(Responses.gameInfo(run, true)).addActionRow(Responses.joinButton(run.getHost().getId(), run.isRsvp()), Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).setEphemeral(true).queue();
             }
         }
     }

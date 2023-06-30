@@ -26,11 +26,18 @@ public class Responses {
     public static String notInQueue() { return "You are not currently participating in a run."; }
     public static String notInQueue(String player) { return player + "is not in this run and must be added first."; }
     public static String fullQueue() { return "This room is already full!"; }
-    public static String joinedQueue(String player, String host, String availability, String type) { return player + " has joined <@" + host + ">'s " + type + "! This run currently " + availability; }
-    public static String leftQueue(String player, String host, String availability, String type) { return player + " has left " + host + "'s " + type + "! This run currently " + availability; }
+    public static String joinedQueue(String player, String host, String availability, String type, boolean isRsvp) {
+        if (isRsvp) { return player + " has RSVP'd for <@" + host + ">'s " + type + "! This upcoming run currently " + availability; }
+        return player + " has joined <@" + host + ">'s " + type + "! This run currently " + availability;
+    }
+    public static String leftQueue(String player, String host, String availability, String type, boolean isRsvp) {
+        if (isRsvp) { return player + " has un-RSVP'd " + host + "'s " + type + "! This upcoming run currently " + availability; }
+        return player + " has left " + host + "'s " + type + "! This run currently " + availability;
+    }
     public static String leftQueue() { return "You have left the queue."; }
     public static String endQueue(String player) { return player + " has ended the run they were hosting."; }
     public static String addToQueue(String player) { return player + " has been added to your run."; }
+    public static String kickedPlayerAnnounce(String player, String host, String availability, String type) { return player + " was removed from " + host + "'s " + type + "! This run currently " + availability;}
     public static String kickedPlayer(String player) { return player + " has been removed from your run."; }
     public static String kickedNotInRun(String player) { return player + " is not in your run and cannot be kicked."; }
     public static String kickedAll() {
@@ -99,7 +106,7 @@ public class Responses {
 
 
     //========= BUTTONS
-    public static Button joinButton (String id) { return joinButton(id, false); }
+    //public static Button joinButton (String id) { return joinButton(id, false); }
     public static Button joinButton(String id, boolean rsvp) {
         String label = "Join Run";
         if (rsvp) { label = "RSVP"; }
@@ -134,8 +141,16 @@ public class Responses {
         } else {
             embed.addField("", "Click Join to get the game name and password for this run!", false);
         }
-        if (run.lastAction() == 1) { embed.addField("","Last Game Created " + run.lastAction() + " minute ago", false); }
-        else { embed.addField("","Last Game Created " + run.lastAction() + " minutes ago", false); }
+        if (run.isRsvp()) {
+            embed.addField("", "This run will start in " + run.timeTilStart(), false);
+        }
+        else {
+            if (run.lastAction() == 1) {
+                embed.addField("", "Last Game Created " + run.lastAction() + " minute ago", false);
+            } else {
+                embed.addField("", "Last Game Created " + run.lastAction() + " minutes ago", false);
+            }
+        }
         embed.addField("**__Participants in this Run__**", "Count: "+run.getMemberCount()+"\n"+getParticipants(run),false);
         embed.setFooter("This run is hosted by " + run.getHost().getEffectiveName(), run.getHost().getAvatarUrl());
         return embed.build();
@@ -161,7 +176,7 @@ public class Responses {
         embed.setFooter("This run is hosted by " + user);
         return embed.build();
     }
-    public static MessageEmbed announcementMade(String ladder, String type, String channel) {
+    public static MessageEmbed announcementMade(String ladder, String type, String channel, boolean isRsvp) {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Your new " + ladder + " " + type + " has been created!");
         embed.setColor(Color.CYAN);
@@ -172,9 +187,14 @@ public class Responses {
                 "**/ng** automatically increments game run-001 to run-002 etc.\n" +
                 "**/kick** Kick player by UID or list UID's of players in your run.\n" +
                 "**/kickall** will kick all players except for you from your run.",false);
-        embed.addField("**__NOTE__**", "As the host, your focus should be on the runs.\n" +
+        embed.addField("**__Host Notice__**", "As the host, your focus should be on the runs.\n" +
                 "Anyone in the run can do **/ng** or kick players that did not leave.\n" +
                 "For the best experience, ask someone in your run to do these tasks!",false);
+        if (isRsvp) {
+            embed.addField("**__RSVP ADVISEMENT__**", "Your run will be announced as starting 5 minutes before the next hour\n" +
+                    "Everyone who RSVP'd will be tagged in a public message to show your run is starting.\n" +
+                    "At 15 minutes prior, if your room is not full, your game will be re-announced!",false);
+        }
         return embed.build();
     }
     public static MessageEmbed publishRun(Run run, String user, String ladder, String type) {

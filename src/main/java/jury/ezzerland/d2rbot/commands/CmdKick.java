@@ -53,5 +53,6 @@ public class CmdKick {
         }
         run.removeMember(kicking);
         event.reply(Responses.kickedPlayer(Responses.memberName(kicking))).setEphemeral(true).queue();
+        run.getChannel().sendMessage(Responses.kickedPlayerAnnounce(Responses.memberName(kicking), run.getHost().getEffectiveName(), run.isFullAsString(), run.getTypeAsString())).addActionRow(Responses.joinButton(run.getHost().getId(), run.isRsvp()), Responses.getInfoButton(run.getHost().getId()), Responses.listRunsButton(run.getHost().getId())).queue();
     }
 }

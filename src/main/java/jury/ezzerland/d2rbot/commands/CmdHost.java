@@ -43,7 +43,7 @@ public class CmdHost {
         run.setPassword(event.getValue("password").getAsString());
         if (isNew) {
             run.broadcastRun(true);
-            event.replyEmbeds((Responses.announcementMade(run.getLadderAsString(), run.getTypeAsString(), run.getChannel().getId()))).addActionRow(Responses.nextGameButton(event.getMember().getId()), Responses.gameInfoButton(event.getMember().getId()), Responses.broadcastButton(event.getMember().getId()), Responses.renameGameButton(event.getMember().getId()), Responses.endRunButton(event.getMember().getId())).setEphemeral(true).queue();
+            event.replyEmbeds((Responses.announcementMade(run.getLadderAsString(), run.getTypeAsString(), run.getChannel().getId(), run.isRsvp()))).addActionRow(Responses.nextGameButton(event.getMember().getId()), Responses.gameInfoButton(event.getMember().getId()), Responses.broadcastButton(event.getMember().getId()), Responses.renameGameButton(event.getMember().getId()), Responses.endRunButton(event.getMember().getId())).setEphemeral(true).queue();
             return;
         }
         event.reply(Responses.renamedRun(run.getGameName(), run.getPassword())).setEphemeral(true).queue();

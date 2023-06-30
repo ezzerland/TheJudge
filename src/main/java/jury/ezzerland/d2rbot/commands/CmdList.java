@@ -33,7 +33,7 @@ public class CmdList {
             if (run.isFull()) {
                 event.getHook().sendMessageEmbeds(Responses.gameInfo(run, true)).setEphemeral(true).queue();
             } else {
-                event.getHook().sendMessageEmbeds(Responses.gameInfo(run, true)).addActionRow(Responses.joinButton(run.getHost().getId())).setEphemeral(true).queue();
+                event.getHook().sendMessageEmbeds(Responses.gameInfo(run, true)).addActionRow(Responses.joinButton(run.getHost().getId(), run.isRsvp())).setEphemeral(true).queue();
             }
         }
     }
