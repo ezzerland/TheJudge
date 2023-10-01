@@ -15,11 +15,11 @@ public class CmdRename {
             return;
         }
         Run run = BOT.getParticipants().get(event.getMember());
-        if (!run.getHost().equals(event.getMember())) {
+        /*if (!run.getHost().equals(event.getMember())) {
             event.reply(Responses.notTheHost()).setEphemeral(true).queue();
             return;
-        }
-        event.replyModal(Responses.getGameInfoModal(false)).queue();
+        }*/
+        event.replyModal(Responses.getGameInfoModal(run.getGameName(), run.getPassword(), false)).queue();
     }
 
     public CmdRename(ButtonInteractionEvent event) {
@@ -28,11 +28,11 @@ public class CmdRename {
             return;
         }
         Run run = BOT.getParticipants().get(event.getMember());
-        if (!run.getHost().equals(event.getMember())) {
+        /*if (!run.getHost().equals(event.getMember())) {
             event.reply(Responses.notTheHost()).setEphemeral(true).queue();
             return;
-        }
-        event.replyModal(Responses.getGameInfoModal(false)).queue();
+        }*/
+        event.replyModal(Responses.getGameInfoModal(run.getGameName(), run.getPassword(), false)).queue();
     }
 
 }

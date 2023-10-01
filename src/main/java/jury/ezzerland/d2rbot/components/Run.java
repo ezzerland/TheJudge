@@ -142,13 +142,13 @@ public class Run {
         fiveMinuteReminderTask = new TimerTask() {
             public void run() {
                 publishRun();
-                fiveMinuteReminder.cancel();
+                if (fiveMinuteReminder != null) { fiveMinuteReminder.cancel(); }
             }
         };
         fifteenMinuteReminderTask = new TimerTask() {
             public void run() {
                 if (!isFull()) { broadcastRun(false); }
-                fifteenMinuteReminder.cancel();
+                if (fifteenMinuteReminder != null) { fifteenMinuteReminder.cancel(); }
             }
         };
         LocalDateTime now = LocalDateTime.now();
@@ -164,9 +164,9 @@ public class Run {
         }
     }
     private void cancelTimers() {
-        fiveMinuteReminder.cancel();
-        fifteenMinuteReminder.cancel();
-        fiveMinuteReminderTask.cancel();
-        fifteenMinuteReminderTask.cancel();
+        if (fiveMinuteReminder != null) { fiveMinuteReminder.cancel(); }
+        if (fifteenMinuteReminder != null) { fifteenMinuteReminder.cancel(); }
+        if (fiveMinuteReminderTask != null) { fiveMinuteReminderTask.cancel(); }
+        if (fifteenMinuteReminderTask != null) { fifteenMinuteReminderTask.cancel(); }
     }
 }

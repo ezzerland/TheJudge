@@ -56,17 +56,17 @@ public class CmdInfo {
             Set<Button> buttonsOne = new HashSet<>(), buttonsTwo = new HashSet<>();
             int i = 0;
             for (Member member : run.getMembers()) {
-                if (run.getHost().equals(member) || player.equals(member)) { // can't kick yourself or the host
+                if (run.getHost().equals(member) || player.equals(member)) { // can't kick the host or yourself
                     continue;
                 }
-                if (i <= 3) {
-                    buttonsOne.add(Responses.kickPlayerButton(member.getId(), member.getEffectiveName()));
-                } else {
-                    buttonsTwo.add(Responses.kickPlayerButton(member.getId(), member.getEffectiveName()));
-                }
                 i++;
+                if (i <= 4) {
+                    buttonsOne.add(Responses.kickPlayerButton(member.getId(), Responses.memberName(member)));
+                } else {
+                    buttonsTwo.add(Responses.kickPlayerButton(member.getId(), Responses.memberName(member)));
+                }
             }
-            if (i >= 4) {
+            if (i >= 5) {
                 event.sendMessageEmbeds(Responses.gameInfo(run, false)).addActionRow(buttonsOne).addActionRow(buttonsTwo).setEphemeral(true).queue();
                 return;
             }

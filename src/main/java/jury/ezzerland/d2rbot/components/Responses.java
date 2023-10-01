@@ -243,21 +243,41 @@ public class Responses {
 
 
     //========= MODALS
-    public static Modal getGameInfoModal(boolean isNew) {
-        TextInput gameName = TextInput.create("gamename", "Game Name", TextInputStyle.SHORT)
-                .setMinLength(1)
-                .setMaxLength(15)
-                .setRequired(true)
-                .setPlaceholder("Jury-Baal-01")
-                .build();
-
-        TextInput password = TextInput.create("password", "Game Password", TextInputStyle.SHORT)
-                .setMinLength(1)
-                .setMaxLength(15)
-                .setRequired(false)
-                .setPlaceholder("Optional")
-                .build();
-
+    public static Modal getGameInfoModal(boolean isNew) { return getGameInfoModal(null, null, isNew); }
+    public static Modal getGameInfoModal(String currentName, String currentPassword, boolean isNew) {
+        TextInput gameName, password;
+        if (currentName != null && !currentName.isBlank()) {
+            gameName = TextInput.create("gamename", "Game Name", TextInputStyle.SHORT)
+                    .setMinLength(1)
+                    .setMaxLength(15)
+                    .setRequired(true)
+                    .setValue(currentName)
+                    .build();
+        }
+        else {
+            gameName = TextInput.create("gamename", "Game Name", TextInputStyle.SHORT)
+                    .setMinLength(1)
+                    .setMaxLength(15)
+                    .setRequired(true)
+                    .setPlaceholder("Jury-Baal-01")
+                    .build();
+        }
+        if (currentPassword != null && !currentPassword.isBlank()) {
+            password = TextInput.create("password", "Game Password", TextInputStyle.SHORT)
+                    .setMinLength(1)
+                    .setMaxLength(15)
+                    .setRequired(false)
+                    .setValue(currentPassword)
+                    .build();
+        }
+        else {
+            password = TextInput.create("password", "Game Password", TextInputStyle.SHORT)
+                    .setMinLength(1)
+                    .setMaxLength(15)
+                    .setRequired(false)
+                    .setPlaceholder("Optional")
+                    .build();
+        }
         if (isNew) {
             return Modal.create("host-true", "Enter Game Information")
                     .addActionRows(ActionRow.of(gameName), ActionRow.of(password))
