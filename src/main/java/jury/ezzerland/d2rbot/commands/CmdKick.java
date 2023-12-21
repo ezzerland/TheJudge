@@ -43,7 +43,7 @@ public class CmdKick {
             event.reply(Responses.cannotKickHost()).setEphemeral(true).queue();
             return;
         }
-        if (run.getHost().equals(event.getMember())) {
+        if (event.getMember().equals(kicking)) {
             event.reply(Responses.cannotKickSelf()).setEphemeral(true).queue();
             return;
         }
