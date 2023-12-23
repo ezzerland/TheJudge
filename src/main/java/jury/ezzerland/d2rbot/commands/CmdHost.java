@@ -1,8 +1,6 @@
 package jury.ezzerland.d2rbot.commands;
 
-import jury.ezzerland.d2rbot.components.Responses;
-import jury.ezzerland.d2rbot.components.Run;
-import jury.ezzerland.d2rbot.components.RunType;
+import jury.ezzerland.d2rbot.components.*;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
@@ -18,13 +16,16 @@ public class CmdHost {
         Run run = new Run(event.getMember());
         RunType type = RunType.valueOf(event.getOption("type").getAsString());
         run.setType(type);
-        run.setLadder(Boolean.valueOf(event.getOption("ladder").getAsString()));
+        run.setMode(RunMode.valueOf(event.getOption("mode").getAsString()));
         run.setRsvp(Boolean.valueOf(event.getOption("rsvp").getAsString()));
+        run.setFlag(RunFlag.valueOf(event.getOption("flag").getAsString()));
         BOT.getParticipants().put(event.getMember(), run);
         if (run.isLadder()) {
-            BOT.getLadder().get(type).add(run);
+            if (run.isHardcore()) { BOT.getHCLadder().get(type).add(run); }
+            else { BOT.getLadder().get(type).add(run); }
         } else {
-            BOT.getNonLadder().get(type).add(run);
+            if (run.isHardcore()) { BOT.getNonLadder().get(type).add(run); }
+            else { BOT.getHCNonLadder().get(type).add(run); }
         }
         if (!BOT.getParticipants().containsKey(event.getMember())) {
             event.reply(Responses.failedToHost()).setEphemeral(true).queue();
@@ -43,7 +44,7 @@ public class CmdHost {
         run.setPassword(event.getValue("password").getAsString());
         if (isNew) {
             run.broadcastRun(true);
-            event.replyEmbeds((Responses.announcementMade(run.getLadderAsString(), run.getTypeAsString(), run.getChannel().getId(), run.isRsvp()))).addActionRow(Responses.nextGameButton(event.getMember().getId()), Responses.gameInfoButton(event.getMember().getId()), Responses.broadcastButton(event.getMember().getId()), Responses.renameGameButton(event.getMember().getId()), Responses.endRunButton(event.getMember().getId())).setEphemeral(true).queue();
+            event.replyEmbeds((Responses.announcementMade(run.getModeAsString(), run.getTypeAsString(), run.getChannel().getId(), run.isRsvp()))).addActionRow(Responses.nextGameButton(event.getMember().getId()), Responses.gameInfoButton(event.getMember().getId()), Responses.broadcastButton(event.getMember().getId()), Responses.renameGameButton(event.getMember().getId()), Responses.endRunButton(event.getMember().getId())).setEphemeral(true).queue();
             return;
         }
         event.reply(Responses.renamedRun(run.getGameName(), run.getPassword())).setEphemeral(true).queue();

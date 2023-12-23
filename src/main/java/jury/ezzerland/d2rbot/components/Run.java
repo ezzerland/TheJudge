@@ -18,11 +18,13 @@ import static jury.ezzerland.d2rbot.TheJudge.BOT;
 public class Run {
 
     private RunType type = RunType.BAAL;
+    private RunMode mode = RunMode.NONLADDER;
+    private RunFlag flag = RunFlag.NONE;
     private Member host;
     private Set<Member> members;
     private Integer maxMembers = 8;
     private String gameName = "", password = "";
-    private boolean ladder = false, rsvp = false;
+    private boolean rsvp = false;
     private long lastAction;
     private Timer fiveMinuteReminder, fifteenMinuteReminder;
     private TimerTask fiveMinuteReminderTask, fifteenMinuteReminderTask;
@@ -34,37 +36,65 @@ public class Run {
     }
 
     public void broadcastRun(boolean isNew) {
-        getChannel().sendMessageEmbeds(Responses.announceNewRun(getHost().getEffectiveName(), getLadderAsString(),getTypeAsString(), isNew, isRsvp())).addActionRow(Responses.joinButton(getHost().getId(), isRsvp()), Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue();
+        getChannel().sendMessageEmbeds(Responses.announceNewRun(getHost().getEffectiveName(), getModeAsString(),getTypeAsString(), isNew, isRsvp())).addActionRow(Responses.joinButton(getHost().getId(), isRsvp()), Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue();
         updateLastAction();
         if (isNew && isRsvp()) { setUpTimers(); }
     }
 
     public void publishRun() {
-        if (!isFull()) { getChannel().sendMessageEmbeds(Responses.publishRun(this, getHost().getEffectiveName(), getLadderAsString(), getTypeAsString())).addActionRow(Responses.joinButton(getHost().getId(), isRsvp()), Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue(); }
-        else { getChannel().sendMessageEmbeds(Responses.publishRun(this, getHost().getEffectiveName(), getLadderAsString(), getTypeAsString())).addActionRow(Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue(); }
+        if (!isFull()) { getChannel().sendMessageEmbeds(Responses.publishRun(this, getHost().getEffectiveName(), getModeAsString(), getTypeAsString())).addActionRow(Responses.joinButton(getHost().getId(), isRsvp()), Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue(); }
+        else { getChannel().sendMessageEmbeds(Responses.publishRun(this, getHost().getEffectiveName(), getModeAsString(), getTypeAsString())).addActionRow(Responses.getInfoButton(getHost().getId()), Responses.listRunsButton(getHost().getId())).queue(); }
         updateLastAction();
         setRsvp(false);
         cancelTimers();
     }
 
     public TextChannel getChannel() {
-        if (ladder) {
-            if (getType().equals(RunType.PVP)) { return BOT.getShardManager().getTextChannelById(Environment.PVP_LADDER_CHANNEL); }
-            return BOT.getShardManager().getTextChannelById(Environment.LADDER_CHANNEL);
-        } else {
-            if (getType().equals(RunType.PVP)) { return BOT.getShardManager().getTextChannelById(Environment.PVP_NONLADDER_CHANNEL); }
-            return BOT.getShardManager().getTextChannelById(Environment.NONLADDER_CHANNEL);
+        switch (mode) {
+            case HCLADDER:
+                return BOT.getShardManager().getTextChannelById(Environment.HARDCORE_LADDER_CHANNEL);
+            case HCNONLADDER:
+                return BOT.getShardManager().getTextChannelById(Environment.HARDCORE_NONLADDER_CHANNEL);
+            case LADDER:
+                if (getType().equals(RunType.PVP)) { return BOT.getShardManager().getTextChannelById(Environment.PVP_LADDER_CHANNEL); }
+                return BOT.getShardManager().getTextChannelById(Environment.LADDER_CHANNEL);
+            case NONLADDER:
+                if (getType().equals(RunType.PVP)) { return BOT.getShardManager().getTextChannelById(Environment.PVP_NONLADDER_CHANNEL); }
+                return BOT.getShardManager().getTextChannelById(Environment.NONLADDER_CHANNEL);
         }
+        return BOT.getShardManager().getTextChannelById(Environment.NONLADDER_CHANNEL);
     }
     public String getLadderAsString() {
-        if (ladder) { return "Ladder"; }
+        if (isLadder()) { return "Ladder"; }
         else { return "Non-Ladder"; }
     }
-    public String getTypeAsString() { return type.getTypeAsString(type); }
+    public String getHardcoreAsString() {
+        if (isHardcore()) { return "Hardcore "; }
+        else { return ""; }
+    }
+    public String getModeAsString() {
+        return getHardcoreAsString() + "" + getLadderAsString();
+    }
+    public String getTypeAsString() {
+        if (getsFlagged()) {return getFlagTypeCombined(); }
+        return type.getTypeAsString(type);
+    }
     public void setHost(Member host) { this.host = host; }
     public Member getHost() { return this.host; }
     public void setType(RunType type) { this.type = type; }
     public RunType getType() { return this.type; }
+    public void setFlag(RunFlag flag) {this.flag = flag; }
+    //public RunFlag getFlag() { return this.flag; }
+    private boolean getsFlagged () {
+        switch (type) {
+            case CHAOS:
+            case BAAL:
+                return true;
+            default:
+                return false;
+        }
+    }
+    private String getFlagTypeCombined() { return flag.getFlagAsString(flag) + "" + type.getTypeAsString(type); }
     public boolean addMember(Member member) {
         if (members.size() >= maxMembers) { return false; }
         members.add(member);
@@ -103,8 +133,17 @@ public class Run {
     public String getGameName() { return gameName; }
     public void setPassword (String password) { this.password = password; }
     public String getPassword() { return password; }
-    public void setLadder(boolean ladder) { this.ladder = ladder; }
-    public boolean isLadder() { return ladder; }
+    //public void setLadder(boolean ladder) { this.ladder = ladder; }
+    //public boolean isLadder() { return ladder; }
+    public void setMode(RunMode mode) {this.mode = mode; }
+    public boolean isLadder() {
+        if (mode.equals(RunMode.LADDER) || mode.equals(RunMode.HCLADDER)) { return true; }
+        return false;
+    }
+    public boolean isHardcore() {
+        if (mode.equals(RunMode.HCNONLADDER) || mode.equals(RunMode.HCLADDER)) { return true; }
+        return false;
+    }
     public void setRsvp(boolean rsvp) { this.rsvp = rsvp; }
     public boolean isRsvp() { return rsvp; }
     public void endRun() {
@@ -126,7 +165,7 @@ public class Run {
     }
     public long lastAction() { return TimeUnit.NANOSECONDS.toMinutes(System.nanoTime()-lastAction); }
     public boolean renameIsOnCooldown() {
-        if (TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()-lastAction) > 30) { return false; }
+        if (TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()-lastAction) > 15) { return false; }
         return true;
     }
 

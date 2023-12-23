@@ -19,7 +19,7 @@ public class CommandManager extends ListenerAdapter {
     @Override
     public void onReady(@NotNull ReadyEvent event) {
         List<CommandData> commandData = new ArrayList<>();
-        commandData.add(Commands.slash("host", "Host a new run").addOptions(Responses.getRunTypeAsOption(), Responses.getLadderAsOption(), Responses.getRsvpAsOption()));
+        commandData.add(Commands.slash("host", "Host a new run").addOptions(Responses.getRunTypeAsOption(), Responses.getModeAsOption(), Responses.getRsvpAsOption(), Responses.getFlagAsOption()));
         //commandData.add(Commands.slash("list", "Lists the current runs available to join").addOptions(Responses.getRunTypeAsOption(), Responses.getLadderAsOption()));
         commandData.add(Commands.slash("runs", "Lists the amount of runs currently active"));
         commandData.add(Commands.slash("list", "Lists the amount of runs currently active"));

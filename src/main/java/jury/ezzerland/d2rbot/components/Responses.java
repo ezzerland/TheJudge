@@ -132,7 +132,7 @@ public class Responses {
     //========= EMBEDS
     public static MessageEmbed gameInfo(Run run, boolean isList) {
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle(run.getHost().getEffectiveName() + " - " + run.getLadderAsString() + " " + run.getTypeAsString());
+        embed.setTitle(run.getHost().getEffectiveName() + " - " + run.getModeAsString() + " " + run.getTypeAsString());
         if (run.isFull()) { embed.setColor(Color.RED); }
         else { embed.setColor(Color.GREEN); }
         if (!isList) {
@@ -155,15 +155,15 @@ public class Responses {
         embed.setFooter("This run is hosted by " + run.getHost().getEffectiveName(), run.getHost().getAvatarUrl());
         return embed.build();
     }
-    public static MessageEmbed announceNewRun(String user, String ladder, String type, boolean isNew, boolean isRsvp) {
+    public static MessageEmbed announceNewRun(String user, String mode, String type, boolean isNew, boolean isRsvp) {
         EmbedBuilder embed = new EmbedBuilder();
         if (isRsvp) {
-            if (isNew) { embed.setTitle(user + " is hosting an upcoming " + ladder + " " + type + "!"); }
-            else { embed.setTitle(user + " has an upcoming " + ladder + " " + type + "!"); }
+            if (isNew) { embed.setTitle(user + " is hosting an upcoming " + mode + " " + type + "!"); }
+            else { embed.setTitle(user + " has an upcoming " + mode + " " + type + "!"); }
         }
         else {
-            if (isNew) { embed.setTitle(user + " is hosting a new " + ladder + " " + type + "!"); }
-            else { embed.setTitle(user + " has a " + ladder + " " + type + " ongoing!"); }
+            if (isNew) { embed.setTitle(user + " is hosting a new " + mode + " " + type + "!"); }
+            else { embed.setTitle(user + " has a " + mode + " " + type + " ongoing!"); }
         }
         if (isRsvp) {
             embed.setColor(Color.MAGENTA);
@@ -176,9 +176,9 @@ public class Responses {
         embed.setFooter("This run is hosted by " + user);
         return embed.build();
     }
-    public static MessageEmbed announcementMade(String ladder, String type, String channel, boolean isRsvp) {
+    public static MessageEmbed announcementMade(String mode, String type, String channel, boolean isRsvp) {
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("Your new " + ladder + " " + type + " has been created!");
+        embed.setTitle("Your new " + mode + " " + type + " has been created!");
         embed.setColor(Color.CYAN);
         embed.addField("", "This game has been announced in <#" + channel + ">.\nYour Game Information will only be shared when people join your run.",false);
         embed.addField("**__Commands__**", "**/leave** will end your run.\n" +
@@ -197,9 +197,9 @@ public class Responses {
         }
         return embed.build();
     }
-    public static MessageEmbed publishRun(Run run, String user, String ladder, String type) {
+    public static MessageEmbed publishRun(Run run, String user, String mode, String type) {
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle(user + " has a " + ladder + " " + type + " beginning now!");
+        embed.setTitle(user + " has a " + mode + " " + type + " beginning now!");
         embed.addField("**__Participants__**", getParticipants(run, true),false);
         if (!run.isFull()) {
             embed.setColor(Color.GREEN);
@@ -222,15 +222,23 @@ public class Responses {
                 .addChoice("MF Runs", "MAGICFIND")
                 .addChoice("PvP Game", "PVP");
     }
-    public static OptionData getLadderAsOption() {
-        return new OptionData(OptionType.STRING, "ladder", "Is this a ladder or non-ladder game?", true)
-                .addChoice("Ladder", "true")
-                .addChoice("Non-Ladder", "false");
+    public static OptionData getModeAsOption() {
+        return new OptionData(OptionType.STRING, "mode", "Ladder? Hardcore?", true)
+                .addChoice("Non-Ladder", "NONLADDER")
+                .addChoice("Ladder", "LADDER")
+                .addChoice("Hardcore Non-Ladder", "HCNONLADDER")
+                .addChoice("Hardcore Ladder", "HCLADDER");
     }
     public static OptionData getRsvpAsOption() {
         return new OptionData(OptionType.STRING, "rsvp", "Will this run start at the beginning of the next hour?", true)
                 .addChoice("Yes", "true")
                 .addChoice("No", "false");
+    }
+    public static OptionData getFlagAsOption() {
+        return new OptionData(OptionType.STRING, "flag", "Optional Flag to help describe the run", false)
+                .addChoice("N/A", "NONE")
+                .addChoice("Pre-Tele Baal", "PRETELE")
+                .addChoice("Full-Clear Chaos", "FULLCLEAR");
     }
     public static OptionData getAddOption() {
         return new OptionData(OptionType.USER, "tag", "Discord @tag of the person you are adding", true);

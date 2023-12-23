@@ -25,7 +25,7 @@ public class TheJudge {
     public static TheJudge BOT;
     private final ShardManager shardManager;
     private Map<Member, Run> participants;
-    private Map<RunType, Set<Run>> ladder, nonladder;
+    private Map<RunType, Set<Run>> ladder, nonladder, hardcoreladder, hardcorenonladder;
 
     public TheJudge() throws LoginException {
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(Environment.TOKEN)
@@ -39,9 +39,13 @@ public class TheJudge {
 
         ladder = new HashMap<>();
         nonladder = new HashMap<>();
+        hardcoreladder = new HashMap<>();
+        hardcorenonladder = new HashMap<>();
         for (RunType type : RunType.values()) {
             ladder.put(type, new HashSet<>());
             nonladder.put(type, new HashSet<>());
+            hardcoreladder.put(type, new HashSet<>());
+            hardcorenonladder.put(type, new HashSet<>());
         }
         participants = new HashMap<>();
     }
@@ -56,7 +60,9 @@ public class TheJudge {
 
     public ShardManager getShardManager() { return shardManager; }
     public Map<Member, Run> getParticipants() { return participants; }
+    public Map<RunType, Set<Run>> getHCLadder() { return hardcoreladder; }
     public Map<RunType, Set<Run>> getLadder() { return ladder; }
+    public Map<RunType, Set<Run>> getHCNonLadder() { return hardcorenonladder; }
     public Map<RunType, Set<Run>> getNonLadder() { return nonladder; }
 
     public void cleanseRuns() {
