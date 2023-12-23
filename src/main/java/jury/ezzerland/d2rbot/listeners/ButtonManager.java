@@ -49,10 +49,16 @@ public class ButtonManager extends ListenerAdapter {
                 new CmdRuns(event);
                 break;
             case "ladder-judge-queue":
-                new CmdList(event, true, user);
+                new CmdList(event, true, false, user);
                 break;
             case "nonladder-judge-queue":
-                new CmdList(event, false, user);
+                new CmdList(event, false, false, user);
+                break;
+            case "hc-ladder-judge-queue":
+                new CmdList(event, true, true, user);
+                break;
+            case "hc-nonladder-judge-queue":
+                new CmdList(event, false, true, user);
                 break;
             default:
                 //unknown Button, do nothing

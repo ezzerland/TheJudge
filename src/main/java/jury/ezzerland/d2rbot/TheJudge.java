@@ -75,6 +75,12 @@ public class TheJudge {
             for (Run run : getNonLadder().get(type)) {
                 if (run.hasExpired()) { cleanse.add(run); }
             }
+            for (Run run : getHCLadder().get(type)) {
+                if (run.hasExpired()) { cleanse.add(run); }
+            }
+            for (Run run : getHCNonLadder().get(type)) {
+                if (run.hasExpired()) { cleanse.add(run); }
+            }
         }
         for (Run run : cleanse) { run.endRun(); }
     }

@@ -12,7 +12,7 @@ import static jury.ezzerland.d2rbot.TheJudge.BOT;
 
 public class CmdList {
 
-    public CmdList (ButtonInteractionEvent event, boolean ladder, String t) {
+    public CmdList (ButtonInteractionEvent event, boolean ladder, boolean hardcore, String t) {
         if (BOT.getParticipants().size() == 0) {
             event.reply(Responses.noActiveRuns()).setEphemeral(true).queue();
             return;
@@ -20,9 +20,11 @@ public class CmdList {
         RunType type = RunType.valueOf(t);
         Set<Run> runs = new HashSet<>();
         if (ladder) {
-            runs.addAll(BOT.getLadder().get(type));
+            if (hardcore) { runs.addAll(BOT.getHCLadder().get(type)); }
+            else { runs.addAll(BOT.getLadder().get(type)); }
         } else {
-            runs.addAll(BOT.getNonLadder().get(type));
+            if (hardcore) { runs.addAll(BOT.getNonLadder().get(type)); }
+            else { runs.addAll(BOT.getHCNonLadder().get(type)); }
         }
         if (runs.size() == 0) {
             event.reply(Responses.noActiveRunsOfType(ladder, type.getTypeAsString(type))).setEphemeral(true).queue();

@@ -26,6 +26,8 @@ public class CmdListAll {
             Set<Run> runs = new HashSet<>();
             runs.addAll(BOT.getLadder().get(type));
             runs.addAll(BOT.getNonLadder().get(type));
+            runs.addAll(BOT.getHCLadder().get(type));
+            runs.addAll(BOT.getHCNonLadder().get(type));
             if (runs.size() == 0) { continue; }
             for (Run run : runs) {
                 if (run.isFull()) {

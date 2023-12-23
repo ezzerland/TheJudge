@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
+import net.dv8tion.jda.api.utils.messages.MessageEditData;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -67,21 +68,33 @@ public class Responses {
     }
     public static void amountOfActiveRuns(InteractionHook event) {
         if (BOT.getParticipants().size() == 0) { event.sendMessage(noActiveRuns()).setEphemeral(true).queue(); return; }
-        String ladder = "", nonladder = "", response = "";
-        int laddercount = 0, nonladdercount = 0;
-        Set<Button> ladderButtons = new HashSet<>(), nonLadderButtons = new HashSet<>();
+        String ladder = "", nonladder = "", response = "", hcladder = "", hcnonladder = "";
+        int laddercount = 0, nonladdercount = 0, hcladdercount = 0, hcnonladdercount = 0;
+        Set<Button> ladderButtons = new HashSet<>(), nonLadderButtons = new HashSet<>(), hcladderButtons = new HashSet<>(), hcnonLadderButtons = new HashSet<>();
         for (RunType type : RunType.values()) {
             if (BOT.getLadder().get(type).size() > 0) {
                 int count = BOT.getLadder().get(type).size();
                 laddercount += count;
                 ladder += "\n" + type.getTypeAsString(type) + "s: " + count;
-                ladderButtons.add(listButton(true, type.toString(), type.getTypeAsString(type)));
+                ladderButtons.add(listButton(true, false, type.toString(), type.getTypeAsString(type)));
             }
             if (BOT.getNonLadder().get(type).size() > 0) {
                 int count = BOT.getNonLadder().get(type).size();
                 nonladdercount += count;
                 nonladder += "\n" + type.getTypeAsString(type) + "s: " + count;
-                nonLadderButtons.add(listButton(false, type.toString(), type.getTypeAsString(type)));
+                nonLadderButtons.add(listButton(false, false, type.toString(), type.getTypeAsString(type)));
+            }
+            if (BOT.getHCLadder().get(type).size() > 0) {
+                int count = BOT.getHCLadder().get(type).size();
+                hcladdercount += count;
+                hcladder += "\n" + type.getTypeAsString(type) + "s: " + count;
+                hcladderButtons.add(listButton(true, true, type.toString(), type.getTypeAsString(type)));
+            }
+            if (BOT.getHCNonLadder().get(type).size() > 0) {
+                int count = BOT.getHCNonLadder().get(type).size();
+                hcnonladdercount += count;
+                hcnonladder += "\n" + type.getTypeAsString(type) + "s: " + count;
+                hcnonLadderButtons.add(listButton(false, true, type.toString(), type.getTypeAsString(type)));
             }
         }
         if (laddercount > 0) {
@@ -90,8 +103,20 @@ public class Responses {
         if (nonladdercount > 0) {
             response += "**__Total Non-Ladder Runs: " + nonladdercount + "__**\n```" + nonladder + "\n```";
         }
+        if (hcladdercount > 0) {
+            response += "**__Total Hardcore Ladder Runs: " + hcladdercount + "__**\n```" + hcladder + "\n```";
+        }
+        if (hcnonladdercount > 0) {
+            response += "**__Total Hardcore Non-Ladder Runs: " + hcnonladdercount + "__**\n```" + hcnonladder + "\n```";
+        }
         response += "Click the buttons below or use `/list` to see what runs are available for you to join!";
-        if (ladderButtons.size() > 0 && nonLadderButtons.size() > 0) {
+        event.sendMessage(response).setEphemeral(true).queue((message) -> {
+            if (nonLadderButtons.size() > 0) { message.getActionRows().add(ActionRow.of(nonLadderButtons)); }
+            if (ladderButtons.size() > 0) { message.getActionRows().add(ActionRow.of(ladderButtons)); }
+            if (hcnonLadderButtons.size() > 0) { message.getActionRows().add(ActionRow.of(hcnonLadderButtons)); }
+            if (hcladderButtons.size() > 0) { message.getActionRows().add(ActionRow.of(hcladderButtons)); }
+        });
+        /*if (ladderButtons.size() > 0 && nonLadderButtons.size() > 0) {
             event.sendMessage(response).addActionRow(ladderButtons).addActionRow(nonLadderButtons).setEphemeral(true).queue();
             return;
         }
@@ -99,7 +124,7 @@ public class Responses {
             event.sendMessage(response).addActionRow(ladderButtons).setEphemeral(true).queue();
             return;
         }
-        event.sendMessage(response).addActionRow(nonLadderButtons).setEphemeral(true).queue();
+        event.sendMessage(response).addActionRow(nonLadderButtons).setEphemeral(true).queue();*/
     }
 
 
@@ -120,9 +145,14 @@ public class Responses {
     public static Button gameInfoButton(String id) { return Button.secondary("info-judge-queue."+id, "Game Info"); }
     public static Button getInfoButton(String id) { return Button.secondary("game-judge-queue."+id, "Game Info"); }
     public static Button renameGameButton(String id) { return Button.primary("rename-judge-queue."+id, "Rename Game"); }
-    public static Button listButton(boolean ladder, String type, String name) {
-        if (ladder) { return Button.success("ladder-judge-queue."+type, "L "+name); }
-        return Button.primary("nonladder-judge-queue."+type, "NL "+name);
+    public static Button listButton(boolean ladder, boolean hardcore, String type, String name) {
+        if (hardcore) {
+            if (ladder) { return Button.danger("hc-ladder-judge-queue."+type, "HCL "+name); }
+            return Button.danger("hc-nonladder-judge-queue."+type, "HCNL "+name);
+        } else {
+            if (ladder) { return Button.success("ladder-judge-queue."+type, "L "+name); }
+            return Button.primary("nonladder-judge-queue."+type, "NL "+name);
+        }
     }
     public static Button listRunsButton(String id) { return Button.primary("runs-judge-queue."+id, "View Runs"); }
 
