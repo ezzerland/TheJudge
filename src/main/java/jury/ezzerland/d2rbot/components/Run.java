@@ -89,6 +89,7 @@ public class Run {
         switch (type) {
             case CHAOS:
             case BAAL:
+            case TERRORZONE:
                 return true;
             default:
                 return false;
