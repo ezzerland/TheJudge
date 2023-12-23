@@ -267,7 +267,7 @@ public class Responses {
                 .addChoice("No", "false");
     }
     public static OptionData getFlagAsOption() {
-        return new OptionData(OptionType.STRING, "flag", "Optional Flag to help describe the run", false)
+        return new OptionData(OptionType.STRING, "flag", "Optional Flag to help describe the run", true)
                 .addChoice("N/A", "NONE")
                 .addChoice("Pre-Tele", "PRETELE")
                 .addChoice("Full-Clear", "FULLCLEAR");
