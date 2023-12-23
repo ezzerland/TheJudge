@@ -11,7 +11,6 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
-import net.dv8tion.jda.api.utils.messages.MessageEditData;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -181,6 +180,9 @@ public class Responses {
                 embed.addField("", "Last Game Created " + run.lastAction() + " minutes ago", false);
             }
         }
+        embed.addField("**__Reminders__**", "Leachers should help manage the run for the host! \n" +
+                "**/kick** - See a list of players in the run and kick them \n" +
+                "**/ng** - automatically increments game run-001 to run-002 etc.", false);
         embed.addField("**__Participants in this Run__**", "Count: "+run.getMemberCount()+"\n"+getParticipants(run),false);
         embed.setFooter("This run is hosted by " + run.getHost().getEffectiveName(), run.getHost().getAvatarUrl());
         return embed.build();
