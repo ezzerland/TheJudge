@@ -269,8 +269,8 @@ public class Responses {
     public static OptionData getFlagAsOption() {
         return new OptionData(OptionType.STRING, "flag", "Optional Flag to help describe the run", false)
                 .addChoice("N/A", "NONE")
-                .addChoice("Pre-Tele Baal", "PRETELE")
-                .addChoice("Full-Clear Chaos", "FULLCLEAR");
+                .addChoice("Pre-Tele", "PRETELE")
+                .addChoice("Full-Clear", "FULLCLEAR");
     }
     public static OptionData getAddOption() {
         return new OptionData(OptionType.USER, "tag", "Discord @tag of the person you are adding", true);
