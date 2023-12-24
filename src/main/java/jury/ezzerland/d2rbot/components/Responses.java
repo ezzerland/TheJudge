@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
@@ -15,6 +16,7 @@ import net.dv8tion.jda.api.interactions.modals.Modal;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static jury.ezzerland.d2rbot.TheJudge.BOT;
 
@@ -35,6 +37,7 @@ public class Responses {
         return player + " has left " + host + "'s " + type + "! This run currently " + availability;
     }
     public static String leftQueue() { return "You have left the queue."; }
+    public static String rsvpTimeOut(Member member) { return "You left an RSVP game and cannot join another RSVP for " + BOT.timeOutRemaining(member) + "."; }
     public static String endQueue(String player) { return player + " has ended the run they were hosting."; }
     public static String addToQueue(String player) { return player + " has been added to your run."; }
     public static String kickedPlayerAnnounce(String player, String host, String availability, String type) { return player + " was removed from " + host + "'s " + type + "! This run currently " + availability;}
@@ -70,6 +73,7 @@ public class Responses {
         String ladder = "", nonladder = "", response = "", hcladder = "", hcnonladder = "";
         int laddercount = 0, nonladdercount = 0, hcladdercount = 0, hcnonladdercount = 0;
         Set<Button> ladderButtons = new HashSet<>(), nonLadderButtons = new HashSet<>(), hcladderButtons = new HashSet<>(), hcnonLadderButtons = new HashSet<>();
+        Set<ActionRow> rows = new HashSet<>();
         for (RunType type : RunType.values()) {
             if (BOT.getLadder().get(type).size() > 0) {
                 int count = BOT.getLadder().get(type).size();
@@ -109,12 +113,19 @@ public class Responses {
             response += "**__Total Hardcore Non-Ladder Runs: " + hcnonladdercount + "__**\n```" + hcnonladder + "\n```";
         }
         response += "Click the buttons below or use `/list` to see what runs are available for you to join!";
-        event.sendMessage(response).setEphemeral(true).queue((message) -> {
-            if (nonLadderButtons.size() > 0) { message.getActionRows().add(ActionRow.of(nonLadderButtons)); }
-            if (ladderButtons.size() > 0) { message.getActionRows().add(ActionRow.of(ladderButtons)); }
-            if (hcnonLadderButtons.size() > 0) { message.getActionRows().add(ActionRow.of(hcnonLadderButtons)); }
-            if (hcladderButtons.size() > 0) { message.getActionRows().add(ActionRow.of(hcladderButtons)); }
-        });
+        /*event.sendMessage(response).setEphemeral(true).queue((message) -> {
+            if (nonLadderButtons.size() > 0) { message.editMessage(message.getContentRaw()).setActionRow(nonLadderButtons).queue(); }
+            if (ladderButtons.size() > 0) { message.editMessage(message.getContentRaw()).setActionRow(ladderButtons).queue(); }
+            if (hcnonLadderButtons.size() > 0) { message.editMessage(message.getContentRaw()).setActionRow(hcnonLadderButtons).queue(); }
+            if (hcladderButtons.size() > 0) { message.editMessage(message.getContentRaw()).setActionRow(hcladderButtons).queue(); }
+            message.editMessage(message).se
+        });*/
+
+        if (nonLadderButtons.size() > 0) { rows.add(ActionRow.of(nonLadderButtons)); }
+        if (ladderButtons.size() > 0) { rows.add(ActionRow.of(ladderButtons)); }
+        if (hcnonLadderButtons.size() > 0) { rows.add(ActionRow.of(hcnonLadderButtons)); }
+        if (hcladderButtons.size() > 0) { rows.add(ActionRow.of(hcladderButtons)); }
+        event.sendMessage(response).addComponents(rows).setEphemeral(true).queue();
         /*if (ladderButtons.size() > 0 && nonLadderButtons.size() > 0) {
             event.sendMessage(response).addActionRow(ladderButtons).addActionRow(nonLadderButtons).setEphemeral(true).queue();
             return;
@@ -358,5 +369,6 @@ public class Responses {
         }
         return member.getNickname();
     }
+
 
 }

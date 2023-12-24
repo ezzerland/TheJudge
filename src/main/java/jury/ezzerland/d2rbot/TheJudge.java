@@ -15,10 +15,12 @@ import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import javax.security.auth.login.LoginException;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class TheJudge {
 
@@ -26,6 +28,7 @@ public class TheJudge {
     private final ShardManager shardManager;
     private Map<Member, Run> participants;
     private Map<RunType, Set<Run>> ladder, nonladder, hardcoreladder, hardcorenonladder;
+    private Map<Member, Long> participantTimeOut;
 
     public TheJudge() throws LoginException {
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(Environment.TOKEN)
@@ -48,6 +51,7 @@ public class TheJudge {
             hardcorenonladder.put(type, new HashSet<>());
         }
         participants = new HashMap<>();
+        participantTimeOut = new HashMap<>();
     }
 
     public static void main(String[] args) {
@@ -64,6 +68,17 @@ public class TheJudge {
     public Map<RunType, Set<Run>> getLadder() { return ladder; }
     public Map<RunType, Set<Run>> getHCNonLadder() { return hardcorenonladder; }
     public Map<RunType, Set<Run>> getNonLadder() { return nonladder; }
+    public Map<Member, Long> getParticipantTimeOut() { return participantTimeOut; }
+    public boolean isOnTimeOut(Member member) {
+        if (getParticipantTimeOut().containsKey(member)) {
+            if (getParticipantTimeOut().get(member) > System.nanoTime()) { return true; }
+            getParticipantTimeOut().remove(member);
+        }
+        return false;
+    }
+    public String timeOutRemaining(Member member) {
+        return TimeUnit.NANOSECONDS.toMinutes(getParticipantTimeOut().get(member)-System.nanoTime()) + " Minutes";
+    }
 
     public void cleanseRuns() {
         if (getParticipants().size() == 0) { return; }

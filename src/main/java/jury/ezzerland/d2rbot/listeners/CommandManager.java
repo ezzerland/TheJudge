@@ -23,6 +23,7 @@ public class CommandManager extends ListenerAdapter {
         //commandData.add(Commands.slash("list", "Lists the current runs available to join").addOptions(Responses.getRunTypeAsOption(), Responses.getLadderAsOption()));
         commandData.add(Commands.slash("runs", "Lists the amount of runs currently active"));
         commandData.add(Commands.slash("list", "Lists the amount of runs currently active"));
+        commandData.add(Commands.slash("listall", "Lists ALL active runs"));
         commandData.add(Commands.slash("leave", "Leave the run you are currently in"));
         commandData.add(Commands.slash("end", "Leave the run you are currently in"));
         commandData.add(Commands.slash("rename", "Update the game name and password for your current run"));
