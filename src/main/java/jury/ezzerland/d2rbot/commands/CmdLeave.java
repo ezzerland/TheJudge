@@ -21,7 +21,7 @@ public class CmdLeave {
             return;
         }
         event.reply(Responses.leftQueue()).setEphemeral(true).queue();
-        if (BOT.getParticipants().get(event.getMember()).isRsvp()) {
+        if (BOT.getParticipants().get(event.getMember()).isRsvp() && !BOT.getParticipants().get(event.getMember()).getHost().equals(event.getMember())) {
             BOT.getParticipantTimeOut().put(event.getMember(), timeoutStamp());
             event.reply(Responses.rsvpTimeOut(event.getMember())).setEphemeral(true).queue();
         }
@@ -34,7 +34,7 @@ public class CmdLeave {
             return;
         }
         event.reply(Responses.leftQueue()).setEphemeral(true).queue();
-        if (BOT.getParticipants().get(event.getMember()).isRsvp()) {
+        if (BOT.getParticipants().get(event.getMember()).isRsvp() && !BOT.getParticipants().get(event.getMember()).getHost().equals(event.getMember())) {
             BOT.getParticipantTimeOut().put(event.getMember(), timeoutStamp());
             event.reply(Responses.rsvpTimeOut(event.getMember())).setEphemeral(true).queue();
         }

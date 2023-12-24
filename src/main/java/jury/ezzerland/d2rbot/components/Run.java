@@ -79,7 +79,7 @@ public class Run {
         if (getsFlagged()) {return getFlagTypeCombined(); }
         return type.getTypeAsString(type);
     }
-    public void setHost(Member host) { this.host = host; }
+    public void setHost(Member host) { this.host = host; updateLastAction(); }
     public Member getHost() { return this.host; }
     public void setType(RunType type) { this.type = type; }
     public RunType getType() { return this.type; }

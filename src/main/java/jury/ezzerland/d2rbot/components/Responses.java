@@ -7,7 +7,6 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
@@ -16,7 +15,6 @@ import net.dv8tion.jda.api.interactions.modals.Modal;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import static jury.ezzerland.d2rbot.TheJudge.BOT;
 
@@ -112,7 +110,7 @@ public class Responses {
         if (hcnonladdercount > 0) {
             response += "**__Total Hardcore Non-Ladder Runs: " + hcnonladdercount + "__**\n```" + hcnonladder + "\n```";
         }
-        response += "Click the buttons below or use `/list` to see what runs are available for you to join!";
+        response += "Click the buttons below or use `/listall` to see what runs are available for you to join!";
         /*event.sendMessage(response).setEphemeral(true).queue((message) -> {
             if (nonLadderButtons.size() > 0) { message.editMessage(message.getContentRaw()).setActionRow(nonLadderButtons).queue(); }
             if (ladderButtons.size() > 0) { message.editMessage(message.getContentRaw()).setActionRow(ladderButtons).queue(); }

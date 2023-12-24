@@ -24,8 +24,8 @@ public class CmdHost {
             if (run.isHardcore()) { BOT.getHCLadder().get(type).add(run); }
             else { BOT.getLadder().get(type).add(run); }
         } else {
-            if (run.isHardcore()) { BOT.getNonLadder().get(type).add(run); }
-            else { BOT.getHCNonLadder().get(type).add(run); }
+            if (run.isHardcore()) { BOT.getHCNonLadder().get(type).add(run); }
+            else { BOT.getNonLadder().get(type).add(run); }
         }
         if (!BOT.getParticipants().containsKey(event.getMember())) {
             event.reply(Responses.failedToHost()).setEphemeral(true).queue();

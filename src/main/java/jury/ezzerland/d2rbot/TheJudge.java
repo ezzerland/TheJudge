@@ -1,5 +1,6 @@
 package jury.ezzerland.d2rbot;
 
+import jury.ezzerland.d2rbot.components.MySQL;
 import jury.ezzerland.d2rbot.components.Run;
 import jury.ezzerland.d2rbot.components.RunType;
 import jury.ezzerland.d2rbot.listeners.ButtonManager;
@@ -15,7 +16,9 @@ import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import javax.security.auth.login.LoginException;
-import java.time.Duration;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -29,6 +32,7 @@ public class TheJudge {
     private Map<Member, Run> participants;
     private Map<RunType, Set<Run>> ladder, nonladder, hardcoreladder, hardcorenonladder;
     private Map<Member, Long> participantTimeOut;
+    private MySQL database;
 
     public TheJudge() throws LoginException {
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(Environment.TOKEN)
@@ -52,6 +56,41 @@ public class TheJudge {
         }
         participants = new HashMap<>();
         participantTimeOut = new HashMap<>();
+
+
+        Connection con = null;
+        Statement st = null;
+        try {
+            database = new MySQL(Environment.SQL_SERVER, Environment.SQL_DATABASE, Environment.SQL_USERNAME, Environment.SQL_PASSWORD);
+            con = database.getConnection();
+            st = con.createStatement();
+            st.executeUpdate("CREATE TABLE IF NOT EXISTS `" + Environment.SQL_DATABASE + "`.`" + Environment.SQL_RANKING_TABLE + "` (" +
+                    " `uuid` VARCHAR(36) NOT NULL ," +
+                    " `username` VARCHAR(32) NOT NULL ," +
+                    " `points` INT DEFAULT 0 ," +
+                    " `host_votes` INT DEFAULT 0 ," +
+                    " `host_score` INT DEFAULT 0 ," +
+                    " `leacher_votes` INT DEFAULT 0 ," +
+                    " `leacher_score` INT DEFAULT 0 ," +
+                    " PRIMARY KEY (`uuid`))" +
+                    "ENGINE = InnoDB;");
+            st.executeUpdate("CREATE TABLE IF NOT EXISTS `" + Environment.SQL_DATABASE + "`.`" + Environment.SQL_RUN_TRACKER_TABLE + "` (" +
+                    " `id` INT NOT NULL AUTO_INCREMENT ," +
+                    " `uuid` VARCHAR(36) NOT NULL ," +
+                    " `host_id` VARCHAR(36) NOT NULL ," +
+                    " `type` INT DEFAULT 0 ," +
+                    " `mode` INT DEFAULT 0 ," +
+                    " `flag` INT DEFAULT 0 ," +
+                    " `rsvp` BOOLEAN NOT NULL DEFAULT 0 ," +
+                    " `name` VARCHAR(20) NOT NULL ," +
+                    " PRIMARY KEY (`id`))" +
+                    "ENGINE = InnoDB;");
+            con.commit();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
     }
 
     public static void main(String[] args) {

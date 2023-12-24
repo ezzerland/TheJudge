@@ -23,8 +23,8 @@ public class CmdList {
             if (hardcore) { runs.addAll(BOT.getHCLadder().get(type)); }
             else { runs.addAll(BOT.getLadder().get(type)); }
         } else {
-            if (hardcore) { runs.addAll(BOT.getNonLadder().get(type)); }
-            else { runs.addAll(BOT.getHCNonLadder().get(type)); }
+            if (hardcore) { runs.addAll(BOT.getHCNonLadder().get(type)); }
+            else { runs.addAll(BOT.getNonLadder().get(type)); }
         }
         if (runs.size() == 0) {
             event.reply(Responses.noActiveRunsOfType(ladder, type.getTypeAsString(type))).setEphemeral(true).queue();
