@@ -19,6 +19,10 @@ public class CmdRename {
             event.reply(Responses.notTheHost()).setEphemeral(true).queue();
             return;
         }*/
+        if (run.renameIsOnCooldown()) {
+            event.reply(Responses.renameCooldown()).setEphemeral(true).queue();
+            return;
+        }
         event.replyModal(Responses.getGameInfoModal(run.getGameName(), run.getPassword(), false)).queue();
     }
 
@@ -32,6 +36,10 @@ public class CmdRename {
             event.reply(Responses.notTheHost()).setEphemeral(true).queue();
             return;
         }*/
+        if (run.renameIsOnCooldown()) {
+            event.reply(Responses.renameCooldown()).setEphemeral(true).queue();
+            return;
+        }
         event.replyModal(Responses.getGameInfoModal(run.getGameName(), run.getPassword(), false)).queue();
     }
 

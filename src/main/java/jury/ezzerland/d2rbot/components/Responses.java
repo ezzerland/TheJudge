@@ -62,6 +62,7 @@ public class Responses {
     }
     public static String renamedRun(String name, String password) { return "Your game information has been updated!\nNew Game Name: " + name + "\nNew Password: "+password; }
     public static String renamedRun(String name) { return "Your game information has been updated!\nNew Game Name: " + name; }
+    public static String renameCooldown() { return "Rename on cooldown, please try again in a few seconds."; }
     public static String errorMessage(String msg) {
         return "**ERROR**: "+msg+"\n"+
                 "Please report this error to the mod team with a screenshot if possible!";
@@ -279,7 +280,8 @@ public class Responses {
         return new OptionData(OptionType.STRING, "flag", "Optional Flag to help describe the run", true)
                 .addChoice("N/A", "NONE")
                 .addChoice("Pre-Tele", "PRETELE")
-                .addChoice("Full-Clear", "FULLCLEAR");
+                .addChoice("Full-Clear", "FULLCLEAR")
+                .addChoice("Seal Pop", "SEALPOP");
     }
     public static OptionData getAddOption() {
         return new OptionData(OptionType.USER, "tag", "Discord @tag of the person you are adding", true);

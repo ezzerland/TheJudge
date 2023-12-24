@@ -85,6 +85,13 @@ public class TheJudge {
                     " `name` VARCHAR(20) NOT NULL ," +
                     " PRIMARY KEY (`id`))" +
                     "ENGINE = InnoDB;");
+            st.executeUpdate("CREATE TABLE IF NOT EXISTS `" + Environment.SQL_DATABASE + "`.`" + Environment.SQL_RATINGS_TABLE + "` (" +
+                    " `id` INT NOT NULL AUTO_INCREMENT ," +
+                    " `uuid` VARCHAR(36) NOT NULL ," +
+                    " `rated_id` VARCHAR(36) NOT NULL ," +
+                    " `score` INT DEFAULT 0 ," +
+                    " PRIMARY KEY (`id`))" +
+                    "ENGINE = InnoDB;");
             con.commit();
 
         } catch (SQLException e) {
@@ -102,6 +109,7 @@ public class TheJudge {
     }
 
     public ShardManager getShardManager() { return shardManager; }
+    public MySQL getDatabase() { return database; }
     public Map<Member, Run> getParticipants() { return participants; }
     public Map<RunType, Set<Run>> getHCLadder() { return hardcoreladder; }
     public Map<RunType, Set<Run>> getLadder() { return ladder; }

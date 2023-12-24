@@ -23,14 +23,11 @@ public class MySQL {
             return connectionPool.getConnection();
         } catch (SQLException e) {
             e.printStackTrace();
-
             return null;
         }
     }
 
     public void shutdown() {
-        if (connectionPool != null) {
-            connectionPool.shutdown();
-        }
+        if (connectionPool != null) { connectionPool.shutdown(); }
     }
 }

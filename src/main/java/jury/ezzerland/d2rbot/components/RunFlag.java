@@ -3,7 +3,8 @@ package jury.ezzerland.d2rbot.components;
 public enum RunFlag {
     NONE(0),
     FULLCLEAR(1),
-    PRETELE(2);
+    PRETELE(2),
+    SEALPOP(3);
 
     private final int number;
 
@@ -15,6 +16,9 @@ public enum RunFlag {
         switch (flag) {
             case FULLCLEAR:
                 asString = "Full-Clear ";
+                break;
+            case SEALPOP:
+                asString = "Seal Pop ";
                 break;
             case PRETELE:
                 asString = "Pre-Tele ";

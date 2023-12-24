@@ -166,7 +166,7 @@ public class Run {
     }
     public long lastAction() { return TimeUnit.NANOSECONDS.toMinutes(System.nanoTime()-lastAction); }
     public boolean renameIsOnCooldown() {
-        if (TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()-lastAction) > 15) { return false; }
+        if (TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()-lastAction) > 5) { return false; }
         return true;
     }
 

@@ -20,6 +20,10 @@ public class CmdNextGame {
             event.reply(Responses.notTheHost()).setEphemeral(true).queue();
             return;
         }*/
+        if (run.renameIsOnCooldown()) {
+            event.reply(Responses.renameCooldown()).setEphemeral(true).queue();
+            return;
+        }
         run.setGameName(increment(run.getGameName()));
         event.reply(Responses.renamedRun(run.getGameName())).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
     }
@@ -34,6 +38,10 @@ public class CmdNextGame {
             event.reply(Responses.notTheHost()).setEphemeral(true).queue();
             return;
         }*/
+        if (run.renameIsOnCooldown()) {
+            event.reply(Responses.renameCooldown()).setEphemeral(true).queue();
+            return;
+        }
         run.setGameName(increment(run.getGameName()));
         event.reply(Responses.renamedRun(run.getGameName())).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
     }
