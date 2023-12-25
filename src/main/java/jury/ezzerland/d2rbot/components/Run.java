@@ -84,7 +84,7 @@ public class Run {
     public void setType(RunType type) { this.type = type; }
     public RunType getType() { return this.type; }
     public void setFlag(RunFlag flag) {this.flag = flag; }
-    //public RunFlag getFlag() { return this.flag; }
+    public RunFlag getFlag() { return this.flag; }
     private boolean getsFlagged () {
         switch (type) {
             case CHAOS:
@@ -137,6 +137,7 @@ public class Run {
     //public void setLadder(boolean ladder) { this.ladder = ladder; }
     //public boolean isLadder() { return ladder; }
     public void setMode(RunMode mode) {this.mode = mode; }
+    public RunMode getMode() { return this.mode; }
     public boolean isLadder() {
         if (mode.equals(RunMode.LADDER) || mode.equals(RunMode.HCLADDER)) { return true; }
         return false;

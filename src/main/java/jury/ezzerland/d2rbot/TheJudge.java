@@ -66,7 +66,6 @@ public class TheJudge {
             st = con.createStatement();
             st.executeUpdate("CREATE TABLE IF NOT EXISTS `" + Environment.SQL_DATABASE + "`.`" + Environment.SQL_RANKING_TABLE + "` (" +
                     " `uuid` VARCHAR(36) NOT NULL ," +
-                    " `username` VARCHAR(32) NOT NULL ," +
                     " `points` INT DEFAULT 0 ," +
                     " `host_votes` INT DEFAULT 0 ," +
                     " `host_score` INT DEFAULT 0 ," +
@@ -97,6 +96,8 @@ public class TheJudge {
         } catch (SQLException e) {
             e.printStackTrace();
             return;
+        } finally {
+            database.closeQuietly(st, con);
         }
     }
 

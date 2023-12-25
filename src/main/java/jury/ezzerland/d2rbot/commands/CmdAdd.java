@@ -4,8 +4,6 @@ import jury.ezzerland.d2rbot.components.Responses;
 import jury.ezzerland.d2rbot.components.Run;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 import static jury.ezzerland.d2rbot.TheJudge.BOT;
 

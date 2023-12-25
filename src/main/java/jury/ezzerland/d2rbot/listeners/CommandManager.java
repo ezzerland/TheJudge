@@ -35,6 +35,7 @@ public class CommandManager extends ListenerAdapter {
         commandData.add(Commands.slash("info", "List the information for the game you are currently in"));
         commandData.add(Commands.slash("add", "Add someone to the run you are currently in").addOptions(Responses.getAddOption()));
         commandData.add(Commands.slash("sethost", "Give host of your run to someone else").addOptions(Responses.getHostOption()));
+        commandData.add(Commands.slash("rate", "Test Command").addOptions(Responses.getAddOption()));
         event.getJDA().updateCommands().addCommands(commandData).queue();
     }
 
@@ -83,6 +84,9 @@ public class CommandManager extends ListenerAdapter {
                 break;
             case "sethost":
                 new CmdSetHost(event);
+                break;
+            case "rate":
+                new CmdRate(event);
                 break;
             default :
                 //unknown command, do nothing

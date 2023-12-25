@@ -20,10 +20,11 @@ public class CmdLeave {
             event.reply(Responses.notInQueue()).addActionRow(Responses.listRunsButton(event.getMember().getId())).setEphemeral(true).queue();
             return;
         }
-        event.reply(Responses.leftQueue()).setEphemeral(true).queue();
         if (BOT.getParticipants().get(event.getMember()).isRsvp() && !BOT.getParticipants().get(event.getMember()).getHost().equals(event.getMember())) {
             BOT.getParticipantTimeOut().put(event.getMember(), timeoutStamp());
             event.reply(Responses.rsvpTimeOut(event.getMember())).setEphemeral(true).queue();
+        } else {
+            event.reply(Responses.leftQueue()).setEphemeral(true).queue();
         }
         leaveCommand(event.getMember());
     }
@@ -33,10 +34,11 @@ public class CmdLeave {
             event.reply(Responses.notInQueue()).addActionRow(Responses.listRunsButton(event.getMember().getId())).setEphemeral(true).queue();
             return;
         }
-        event.reply(Responses.leftQueue()).setEphemeral(true).queue();
         if (BOT.getParticipants().get(event.getMember()).isRsvp() && !BOT.getParticipants().get(event.getMember()).getHost().equals(event.getMember())) {
             BOT.getParticipantTimeOut().put(event.getMember(), timeoutStamp());
             event.reply(Responses.rsvpTimeOut(event.getMember())).setEphemeral(true).queue();
+        } else {
+            event.reply(Responses.leftQueue()).setEphemeral(true).queue();
         }
         leaveCommand(event.getMember());
     }

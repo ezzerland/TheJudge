@@ -21,7 +21,7 @@ public class CmdKick {
             return;
         }*/
         event.deferReply().setEphemeral(true).queue();
-        new CmdInfo(event.getHook(), event.getMember(), run.getHost());
+        new CmdInfo(event.getHook(), event.getMember(), run.getHost(), true);
     }
 
     public CmdKick (ButtonInteractionEvent event, String user) {

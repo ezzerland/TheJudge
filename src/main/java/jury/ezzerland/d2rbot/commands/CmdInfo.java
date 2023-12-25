@@ -20,7 +20,7 @@ public class CmdInfo {
             return;
         }
         event.deferReply().setEphemeral(true).queue();
-        new CmdInfo(event.getHook(), event.getMember(), event.getMember());
+        new CmdInfo(event.getHook(), event.getMember(), event.getMember(), false);
     }
 
     public CmdInfo (ButtonInteractionEvent event) {
@@ -29,7 +29,7 @@ public class CmdInfo {
             return;
         }
         event.deferReply().setEphemeral(true).queue();
-        new CmdInfo(event.getHook(), event.getMember(), event.getMember());
+        new CmdInfo(event.getHook(), event.getMember(), event.getMember(), false);
     }
 
     public CmdInfo (ButtonInteractionEvent event, String user) {
@@ -43,16 +43,16 @@ public class CmdInfo {
             return;
         }
         event.deferReply().setEphemeral(true).queue();
-        new CmdInfo(event.getHook(), event.getMember(), host);
+        new CmdInfo(event.getHook(), event.getMember(), host, false);
     }
 
-    public CmdInfo (InteractionHook event, Member player, Member host) {
+    public CmdInfo (InteractionHook event, Member player, Member host, boolean kick) {
         Run run = BOT.getParticipants().get(host);
         if (run.getMembers().contains(player)) {
-            /*if (!run.getHost().equals(player)) {
-                event.sendMessageEmbeds(Responses.gameInfo(run, false)).addActionRow(Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).setEphemeral(true).queue();
+            if (!kick) {
+                event.sendMessageEmbeds(Responses.gameInfo(run, false)).addActionRow(Responses.nextGameButton(host.getId())).addActionRow(Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).setEphemeral(true).queue();
                 return;
-            }*/
+            }
             Set<Button> buttonsOne = new HashSet<>(), buttonsTwo = new HashSet<>();
             int i = 0;
             for (Member member : run.getMembers()) {
