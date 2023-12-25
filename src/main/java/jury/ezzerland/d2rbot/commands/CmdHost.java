@@ -42,11 +42,25 @@ public class CmdHost {
         }
         run.setGameName(event.getValue("gamename").getAsString());
         run.setPassword(event.getValue("password").getAsString());
+        run.setMaxMembers(getMaxPlayers(event.getValue("maxplayers").getAsString()));
+        run.setDescription(event.getValue("description").getAsString());
         if (isNew) {
             run.broadcastRun(true);
             event.replyEmbeds((Responses.announcementMade(run.getModeAsString(), run.getTypeAsString(), run.getChannel().getId(), run.isRsvp()))).addActionRow(Responses.nextGameButton(event.getMember().getId()), Responses.gameInfoButton(event.getMember().getId()), Responses.broadcastButton(event.getMember().getId()), Responses.renameGameButton(event.getMember().getId()), Responses.endRunButton(event.getMember().getId())).setEphemeral(true).queue();
             return;
         }
         event.reply(Responses.renamedRun(run.getGameName(), run.getPassword())).setEphemeral(true).queue();
+    }
+
+    private int getMaxPlayers(String players) {
+        int max = 8;
+        if (players != null && !players.isBlank()) {
+            try {
+                max = Integer.parseInt(players);
+            } catch (NumberFormatException e) {}
+        }
+        if (max > 8) { max = 8; }
+        if (max < 2) { max = 2; }
+        return max;
     }
 }

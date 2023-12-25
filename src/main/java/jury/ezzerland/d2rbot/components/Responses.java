@@ -62,7 +62,7 @@ public class Responses {
     }
     public static String renamedRun(String name, String password) { return "Your game information has been updated!\nNew Game Name: " + name + "\nNew Password: "+password; }
     public static String renamedRun(String name) { return "Your game information has been updated!\nNew Game Name: " + name; }
-    public static String renameCooldown() { return "Rename on cooldown, please try again in a few seconds."; }
+    public static String renameCooldown() { return "Update game info is on cooldown, please try again in a few seconds."; }
     public static String errorMessage(String msg) {
         return "**ERROR**: "+msg+"\n"+
                 "Please report this error to the mod team with a screenshot if possible!";
@@ -180,6 +180,9 @@ public class Responses {
         } else {
             embed.addField("", "Click Join to get the game name and password for this run!", false);
         }
+        if (run.getDescription() != null && !run.getDescription().isBlank()) {
+            embed.addField("**__Description__**", run.getDescription(), false);
+        }
         if (run.isRsvp()) {
             embed.addField("", "This run will start in " + run.timeTilStart(), false);
         }
@@ -193,7 +196,7 @@ public class Responses {
         embed.addField("**__Reminders__**", "Leachers should help manage the run for the host! \n" +
                 "**/kick** - See a list of players in the run and kick them \n" +
                 "**/ng** - automatically increments game run-001 to run-002 etc.", false);
-        embed.addField("**__Participants in this Run__**", "Count: "+run.getMemberCount()+"\n"+getParticipants(run),false);
+        embed.addField("**__Participants in this Run__**", "Count: "+run.getMemberCount()+"/"+run.getMaxMembers()+"\n"+getParticipants(run),false);
         embed.setFooter("This run is hosted by " + run.getHost().getEffectiveName(), run.getHost().getAvatarUrl());
         return embed.build();
     }
@@ -294,9 +297,9 @@ public class Responses {
 
 
     //========= MODALS
-    public static Modal getGameInfoModal(boolean isNew) { return getGameInfoModal(null, null, isNew); }
-    public static Modal getGameInfoModal(String currentName, String currentPassword, boolean isNew) {
-        TextInput gameName, password;
+    public static Modal getGameInfoModal(boolean isNew) { return getGameInfoModal(null, null, "8", null, isNew); }
+    public static Modal getGameInfoModal(String currentName, String currentPassword, String currentMaxPlayers, String currentDescription, boolean isNew) {
+        TextInput gameName, password, maxPlayers, description;
         if (currentName != null && !currentName.isBlank()) {
             gameName = TextInput.create("gamename", "Game Name", TextInputStyle.SHORT)
                     .setMinLength(1)
@@ -329,12 +332,44 @@ public class Responses {
                     .setPlaceholder("Optional")
                     .build();
         }
-        if (isNew) {
-            return Modal.create("host-true", "Enter Game Information")
-                    .addActionRows(ActionRow.of(gameName), ActionRow.of(password))
+        if (currentMaxPlayers != null && !currentMaxPlayers.isBlank()) {
+            maxPlayers = TextInput.create("maxplayers", "Max Players", TextInputStyle.SHORT)
+                    .setMinLength(1)
+                    .setMaxLength(1)
+                    .setRequired(true)
+                    .setValue(currentMaxPlayers)
                     .build();
         }
-        return Modal.create("host-false", "Enter Game Information")
+        else {
+            maxPlayers = TextInput.create("maxplayers", "Max Players", TextInputStyle.SHORT)
+                    .setMinLength(1)
+                    .setMaxLength(1)
+                    .setRequired(true)
+                    .setValue("8")
+                    .build();
+        }
+        if (currentDescription != null && !currentDescription.isBlank()) {
+            description = TextInput.create("description", "Description", TextInputStyle.PARAGRAPH)
+                    .setMinLength(1)
+                    .setMaxLength(100)
+                    .setRequired(false)
+                    .setValue(currentDescription)
+                    .build();
+        }
+        else {
+            description = TextInput.create("description", "Description", TextInputStyle.PARAGRAPH)
+                    .setMinLength(1)
+                    .setMaxLength(100)
+                    .setRequired(false)
+                    .setPlaceholder("Input missing traits, wants/needs, or positive tidings here.")
+                    .build();
+        }
+        if (isNew) {
+            return Modal.create("host-true", "Enter Game Information")
+                    .addActionRows(ActionRow.of(gameName), ActionRow.of(password), ActionRow.of(maxPlayers), ActionRow.of(description))
+                    .build();
+        }
+        return Modal.create("host-false", "Update Game Information")
                 .addActionRows(ActionRow.of(gameName), ActionRow.of(password))
                 .build();
     }

@@ -23,7 +23,7 @@ public class CmdRename {
             event.reply(Responses.renameCooldown()).setEphemeral(true).queue();
             return;
         }
-        event.replyModal(Responses.getGameInfoModal(run.getGameName(), run.getPassword(), false)).queue();
+        event.replyModal(Responses.getGameInfoModal(run.getGameName(), run.getPassword(), Integer.toString(run.getMaxMembers()), run.getDescription(), false)).queue();
     }
 
     public CmdRename(ButtonInteractionEvent event) {
@@ -40,7 +40,7 @@ public class CmdRename {
             event.reply(Responses.renameCooldown()).setEphemeral(true).queue();
             return;
         }
-        event.replyModal(Responses.getGameInfoModal(run.getGameName(), run.getPassword(), false)).queue();
+        event.replyModal(Responses.getGameInfoModal(run.getGameName(), run.getPassword(), Integer.toString(run.getMaxMembers()), run.getDescription(), false)).queue();
     }
 
 }

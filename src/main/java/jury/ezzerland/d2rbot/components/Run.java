@@ -23,7 +23,7 @@ public class Run {
     private Member host;
     private Set<Member> members;
     private Integer maxMembers = 8;
-    private String gameName = "", password = "";
+    private String gameName = "", password = "", description = "";
     private boolean rsvp = false;
     private long lastAction;
     private Timer fiveMinuteReminder, fifteenMinuteReminder;
@@ -126,14 +126,18 @@ public class Run {
         return "has " + getSpotsOpen() + " spots available!";
     }
     public Set<Member> getMembers() { return members; }
+    public void setMaxMembers(int max) { this.maxMembers = max; }
+    public int getMaxMembers() { return this.maxMembers; }
+    public void setDescription(String description) { this.description = description; }
+    public String getDescription() { return this.description; }
     public void setGameName (String gameName) {
         if (renameIsOnCooldown()) { return; }
         this.gameName = gameName;
         updateLastAction();
     }
-    public String getGameName() { return gameName; }
+    public String getGameName() { return this.gameName; }
     public void setPassword (String password) { this.password = password; }
-    public String getPassword() { return password; }
+    public String getPassword() { return this.password; }
     //public void setLadder(boolean ladder) { this.ladder = ladder; }
     //public boolean isLadder() { return ladder; }
     public void setMode(RunMode mode) {this.mode = mode; }
