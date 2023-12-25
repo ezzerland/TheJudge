@@ -46,6 +46,7 @@ public class CmdHost {
         run.setDescription(event.getValue("description").getAsString());
         if (isNew) {
             run.broadcastRun(true);
+            BOT.getDatabase().addRun(run.getHost(), run);
             event.replyEmbeds((Responses.announcementMade(run.getModeAsString(), run.getTypeAsString(), run.getChannel().getId(), run.isRsvp()))).addActionRow(Responses.nextGameButton(event.getMember().getId()), Responses.gameInfoButton(event.getMember().getId()), Responses.broadcastButton(event.getMember().getId()), Responses.renameGameButton(event.getMember().getId()), Responses.endRunButton(event.getMember().getId())).setEphemeral(true).queue();
             return;
         }

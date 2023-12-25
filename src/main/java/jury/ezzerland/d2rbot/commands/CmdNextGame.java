@@ -43,6 +43,7 @@ public class CmdNextGame {
             return;
         }
         run.setGameName(increment(run.getGameName()));
+        BOT.getDatabase().addRun(run);
         event.reply(Responses.renamedRun(run.getGameName())).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
     }
 

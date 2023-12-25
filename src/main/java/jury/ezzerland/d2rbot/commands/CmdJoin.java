@@ -24,14 +24,15 @@ public class CmdJoin {
             return;
         }
         Run run = BOT.getParticipants().get(host);
-        if (!run.addMember(event.getMember())) {
-            event.reply(Responses.fullQueue()).setEphemeral(true).queue();
-            return;
-        }
         if (run.isRsvp() && BOT.isOnTimeOut(event.getMember())) {
             event.reply(Responses.rsvpTimeOut(event.getMember())).setEphemeral(true).queue();
             return;
         }
+        if (!run.addMember(event.getMember())) {
+            event.reply(Responses.fullQueue()).setEphemeral(true).queue();
+            return;
+        }
+        BOT.getDatabase().addRun(event.getMember(), run);
         BOT.getParticipants().put(event.getMember(), run);
         if (run.isFull()) { run.getChannel().sendMessage(Responses.joinedQueue(Responses.memberName(event.getMember()), host.getId(), run.isFullAsString(), run.getTypeAsString(), run.isRsvp())).addActionRow(Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).queue(); }
         else { run.getChannel().sendMessage(Responses.joinedQueue(Responses.memberName(event.getMember()), host.getId(), run.isFullAsString(), run.getTypeAsString(), run.isRsvp())).addActionRow(Responses.joinButton(host.getId(), run.isRsvp()), Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).queue(); }

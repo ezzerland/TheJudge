@@ -82,6 +82,7 @@ public class TheJudge {
                     " `flag` INT DEFAULT 0 ," +
                     " `rsvp` BOOLEAN NOT NULL DEFAULT 0 ," +
                     " `name` VARCHAR(20) NOT NULL ," +
+                    " `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ," +
                     " PRIMARY KEY (`id`))" +
                     "ENGINE = InnoDB;");
             st.executeUpdate("CREATE TABLE IF NOT EXISTS `" + Environment.SQL_DATABASE + "`.`" + Environment.SQL_RATINGS_TABLE + "` (" +
@@ -89,6 +90,7 @@ public class TheJudge {
                     " `uuid` VARCHAR(36) NOT NULL ," +
                     " `rated_id` VARCHAR(36) NOT NULL ," +
                     " `score` INT DEFAULT 0 ," +
+                    " `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ," +
                     " PRIMARY KEY (`id`))" +
                     "ENGINE = InnoDB;");
             con.commit();

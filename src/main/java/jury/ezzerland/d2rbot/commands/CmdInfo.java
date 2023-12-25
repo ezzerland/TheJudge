@@ -50,7 +50,7 @@ public class CmdInfo {
         Run run = BOT.getParticipants().get(host);
         if (run.getMembers().contains(player)) {
             if (!kick) {
-                event.sendMessageEmbeds(Responses.gameInfo(run, false)).addActionRow(Responses.nextGameButton(host.getId())).addActionRow(Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).setEphemeral(true).queue();
+                event.sendMessageEmbeds(Responses.gameInfo(run, false)).addActionRow(Responses.nextGameButton(host.getId()), Responses.getInfoButton(host.getId()), Responses.listRunsButton(host.getId())).setEphemeral(true).queue();
                 return;
             }
             Set<Button> buttonsOne = new HashSet<>(), buttonsTwo = new HashSet<>();

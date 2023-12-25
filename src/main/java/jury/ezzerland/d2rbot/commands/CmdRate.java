@@ -14,8 +14,8 @@ public class CmdRate {
             event.reply(Responses.errorMessage("Member not found "+event.getOption("tag").getAsString())).setEphemeral(true).queue();
             return;
         }
-        BOT.getDatabase().updateRanking(member, 5, true);
-        BOT.getDatabase().updateRanking(member, 4, false);
-        event.reply("Test rating registered").setEphemeral(true).queue();
+        //BOT.getDatabase().updateRanking(member, 5, true);
+        //BOT.getDatabase().updateRanking(member, 4, false);
+        event.reply("Nothing Happened. Command not yet operational.").setEphemeral(true).queue();
     }
 }
