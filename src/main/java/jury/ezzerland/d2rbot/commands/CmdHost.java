@@ -40,6 +40,11 @@ public class CmdHost {
             event.reply(Responses.failedToHost()).setEphemeral(true).queue();
             return;
         }
+        if (event.getValue("gamename") == null) {
+            if (isNew) { BOT.getParticipants().remove(event.getMember()); }
+            event.reply(Responses.failedToHost()).setEphemeral(true).queue();
+            return;
+        }
         run.setGameName(event.getValue("gamename").getAsString());
         run.setPassword(event.getValue("password").getAsString());
         run.setMaxMembers(getMaxPlayers(event.getValue("maxplayers").getAsString()));
