@@ -297,8 +297,8 @@ public class Responses {
 
 
     //========= MODALS
-    public static Modal getGameInfoModal(boolean isNew) { return getGameInfoModal(null, null, "8", null, isNew); }
-    public static Modal getGameInfoModal(String currentName, String currentPassword, String currentMaxPlayers, String currentDescription, boolean isNew) {
+    public static Modal getGameInfoModal(boolean isNew, Run run) { return getGameInfoModal(null, null, "8", null, isNew, run); }
+    public static Modal getGameInfoModal(String currentName, String currentPassword, String currentMaxPlayers, String currentDescription, boolean isNew, Run run) {
         TextInput gameName, password, maxPlayers, description;
         if (currentName != null && !currentName.isBlank()) {
             gameName = TextInput.create("gamename", "Game Name", TextInputStyle.SHORT)
@@ -332,22 +332,6 @@ public class Responses {
                     .setPlaceholder("Optional")
                     .build();
         }
-        if (currentMaxPlayers != null && !currentMaxPlayers.isBlank()) {
-            maxPlayers = TextInput.create("maxplayers", "Max Players", TextInputStyle.SHORT)
-                    .setMinLength(1)
-                    .setMaxLength(1)
-                    .setRequired(true)
-                    .setValue(currentMaxPlayers)
-                    .build();
-        }
-        else {
-            maxPlayers = TextInput.create("maxplayers", "Max Players", TextInputStyle.SHORT)
-                    .setMinLength(1)
-                    .setMaxLength(1)
-                    .setRequired(true)
-                    .setValue("8")
-                    .build();
-        }
         if (currentDescription != null && !currentDescription.isBlank()) {
             description = TextInput.create("description", "Description", TextInputStyle.PARAGRAPH)
                     .setMinLength(1)
@@ -364,9 +348,31 @@ public class Responses {
                     .setPlaceholder("Input missing traits, wants/needs, or positive tidings here.")
                     .build();
         }
+        if (run.getType().equals(RunType.GRUSH)) {
+            if (currentMaxPlayers != null && !currentMaxPlayers.isBlank()) {
+                maxPlayers = TextInput.create("maxplayers", "Max Players", TextInputStyle.SHORT)
+                        .setMinLength(1)
+                        .setMaxLength(1)
+                        .setRequired(true)
+                        .setValue(currentMaxPlayers)
+                        .build();
+            } else {
+                maxPlayers = TextInput.create("maxplayers", "Max Players", TextInputStyle.SHORT)
+                        .setMinLength(1)
+                        .setMaxLength(1)
+                        .setRequired(true)
+                        .setValue("8")
+                        .build();
+            }
+            if (isNew) {
+                return Modal.create("host-true", "Enter Game Information")
+                        .addActionRows(ActionRow.of(gameName), ActionRow.of(password), ActionRow.of(maxPlayers), ActionRow.of(description))
+                        .build();
+            }
+        }
         if (isNew) {
             return Modal.create("host-true", "Enter Game Information")
-                    .addActionRows(ActionRow.of(gameName), ActionRow.of(password), ActionRow.of(maxPlayers), ActionRow.of(description))
+                    .addActionRows(ActionRow.of(gameName), ActionRow.of(password), ActionRow.of(description))
                     .build();
         }
         return Modal.create("host-false", "Update Game Information")

@@ -31,7 +31,7 @@ public class CmdHost {
             event.reply(Responses.failedToHost()).setEphemeral(true).queue();
             return;
         }
-        event.replyModal(Responses.getGameInfoModal(true)).queue();
+        event.replyModal(Responses.getGameInfoModal(true, run)).queue();
     }
 
     public CmdHost (ModalInteractionEvent event, boolean isNew) {
@@ -47,7 +47,7 @@ public class CmdHost {
         }
         run.setGameName(event.getValue("gamename").getAsString());
         run.setPassword(event.getValue("password").getAsString());
-        run.setMaxMembers(getMaxPlayers(event.getValue("maxplayers").getAsString()));
+        if (run.getType().equals(RunType.GRUSH)) { run.setMaxMembers(getMaxPlayers(event.getValue("maxplayers").getAsString())); }
         run.setDescription(event.getValue("description").getAsString());
         if (isNew) {
             run.broadcastRun(true);
