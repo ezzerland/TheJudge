@@ -75,41 +75,75 @@ public class Responses {
         Set<ActionRow> rows = new HashSet<>();
         for (RunType type : RunType.values()) {
             if (BOT.getLadder().get(type).size() > 0) {
-                int count = BOT.getLadder().get(type).size();
-                laddercount += count;
-                ladder += "\n" + type.getTypeAsString(type) + "s: " + count;
-                ladderButtons.add(listButton(true, false, type.toString(), type.getTypeAsString(type)));
+                int count = 0;
+                for (Run run : BOT.getLadder().get(type)) {
+                    if (!run.isFull()) {
+                        count++;
+                    }
+                }
+                if (count > 0) {
+                    laddercount += count;
+                    ladder += "\n" + type.getTypeAsString(type) + "s: " + count;
+                    ladderButtons.add(listButton(true, false, type.toString(), type.getTypeAsString(type)));
+                }
             }
             if (BOT.getNonLadder().get(type).size() > 0) {
+                int count = 0;
+                for (Run run : BOT.getLadder().get(type)) {
+                    if (!run.isFull()) {
+                        count++;
+                    }
+                }
+                if (count > 0) {
+                    nonladdercount += count;
+                    nonladder += "\n" + type.getTypeAsString(type) + "s: " + count;
+                    nonLadderButtons.add(listButton(false, false, type.toString(), type.getTypeAsString(type)));
+                }
+            }
+            /*if (BOT.getNonLadder().get(type).size() > 0) {
                 int count = BOT.getNonLadder().get(type).size();
                 nonladdercount += count;
                 nonladder += "\n" + type.getTypeAsString(type) + "s: " + count;
                 nonLadderButtons.add(listButton(false, false, type.toString(), type.getTypeAsString(type)));
-            }
+            }*/
             if (BOT.getHCLadder().get(type).size() > 0) {
-                int count = BOT.getHCLadder().get(type).size();
-                hcladdercount += count;
-                hcladder += "\n" + type.getTypeAsString(type) + "s: " + count;
-                hcladderButtons.add(listButton(true, true, type.toString(), type.getTypeAsString(type)));
+                int count = 0;
+                for (Run run : BOT.getLadder().get(type)) {
+                    if (!run.isFull()) {
+                        count++;
+                    }
+                }
+                if (count > 0) {
+                    hcladdercount += count;
+                    hcladder += "\n" + type.getTypeAsString(type) + "s: " + count;
+                    hcladderButtons.add(listButton(true, true, type.toString(), type.getTypeAsString(type)));
+                }
             }
             if (BOT.getHCNonLadder().get(type).size() > 0) {
-                int count = BOT.getHCNonLadder().get(type).size();
-                hcnonladdercount += count;
-                hcnonladder += "\n" + type.getTypeAsString(type) + "s: " + count;
-                hcnonLadderButtons.add(listButton(false, true, type.toString(), type.getTypeAsString(type)));
+                int count = 0;
+                for (Run run : BOT.getLadder().get(type)) {
+                    if (!run.isFull()) {
+                        count++;
+                    }
+                }
+                if (count > 0) {
+                    hcnonladdercount += count;
+                    hcnonladder += "\n" + type.getTypeAsString(type) + "s: " + count;
+                    hcnonLadderButtons.add(listButton(false, true, type.toString(), type.getTypeAsString(type)));
+                }
             }
         }
         if (laddercount > 0) {
-            response += "**__Total Ladder Runs: " + laddercount + "__**\n```" + ladder + "\n```";
+            response += "**__Open Ladder Runs: " + laddercount + "__**\n```" + ladder + "\n```";
         }
         if (nonladdercount > 0) {
-            response += "**__Total Non-Ladder Runs: " + nonladdercount + "__**\n```" + nonladder + "\n```";
+            response += "**__Open Non-Ladder Runs: " + nonladdercount + "__**\n```" + nonladder + "\n```";
         }
         if (hcladdercount > 0) {
-            response += "**__Total Hardcore Ladder Runs: " + hcladdercount + "__**\n```" + hcladder + "\n```";
+            response += "**__Open Hardcore Ladder Runs: " + hcladdercount + "__**\n```" + hcladder + "\n```";
         }
         if (hcnonladdercount > 0) {
-            response += "**__Total Hardcore Non-Ladder Runs: " + hcnonladdercount + "__**\n```" + hcnonladder + "\n```";
+            response += "**__Open Hardcore Non-Ladder Runs: " + hcnonladdercount + "__**\n```" + hcnonladder + "\n```";
         }
         response += "Click the buttons below or use `/listall` to see what runs are available for you to join!";
         /*event.sendMessage(response).setEphemeral(true).queue((message) -> {
@@ -264,6 +298,7 @@ public class Responses {
                 .addChoice("Baal Runs", "BAAL")
                 .addChoice("Chaos Runs", "CHAOS")
                 .addChoice("TZ Runs", "TERRORZONE")
+                .addChoice("G-Rush", "GRUSH")
                 .addChoice("MF Runs", "MAGICFIND")
                 .addChoice("PvP Game", "PVP");
     }
@@ -284,7 +319,9 @@ public class Responses {
                 .addChoice("N/A", "NONE")
                 .addChoice("Pre-Tele", "PRETELE")
                 .addChoice("Full-Clear", "FULLCLEAR")
-                .addChoice("Seal Pop", "SEALPOP");
+                .addChoice("Seal Pop", "SEALPOP")
+                .addChoice("Elite Hunt", "ELITEHUNT")
+                .addChoice("Boss Kill", "BOSSKILL");
     }
     public static OptionData getAddOption() {
         return new OptionData(OptionType.USER, "tag", "Discord @tag of the person you are adding", true);
@@ -366,6 +403,10 @@ public class Responses {
             }
             if (isNew) {
                 return Modal.create("host-true", "Enter Game Information")
+                        .addActionRows(ActionRow.of(gameName), ActionRow.of(password), ActionRow.of(maxPlayers), ActionRow.of(description))
+                        .build();
+            } else {
+                return Modal.create("host-false", "Enter Game Information")
                         .addActionRows(ActionRow.of(gameName), ActionRow.of(password), ActionRow.of(maxPlayers), ActionRow.of(description))
                         .build();
             }

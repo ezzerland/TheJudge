@@ -46,9 +46,14 @@ public class CmdHost {
             return;
         }
         run.setGameName(event.getValue("gamename").getAsString());
-        run.setPassword(event.getValue("password").getAsString());
-        if (run.getType().equals(RunType.GRUSH)) { run.setMaxMembers(getMaxPlayers(event.getValue("maxplayers").getAsString())); }
-        run.setDescription(event.getValue("description").getAsString());
+        if (event.getValue("password") == null) { run.setPassword(""); }
+        else { run.setPassword(event.getValue("password").getAsString()); }
+        if (run.getType().equals(RunType.GRUSH)) {
+            if (event.getValue("maxplayers") == null) { run.setMaxMembers(8); }
+            else { run.setMaxMembers(getMaxPlayers(run.getMemberCount(), event.getValue("maxplayers").getAsString())); }
+        }
+        if (event.getValue("description") == null) { run.setDescription(""); }
+        else { run.setDescription(event.getValue("description").getAsString()); }
         if (isNew) {
             run.broadcastRun(true);
             BOT.getDatabase().addRun(run.getHost(), run);
@@ -58,7 +63,7 @@ public class CmdHost {
         event.reply(Responses.renamedRun(run.getGameName(), run.getPassword())).setEphemeral(true).queue();
     }
 
-    private int getMaxPlayers(String players) {
+    private int getMaxPlayers(int currentCount, String players) {
         int max = 8;
         if (players != null && !players.isBlank()) {
             try {
@@ -67,6 +72,7 @@ public class CmdHost {
         }
         if (max > 8) { max = 8; }
         if (max < 2) { max = 2; }
+        if (max < currentCount) { max = currentCount; }
         return max;
     }
 }
