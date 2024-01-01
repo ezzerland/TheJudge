@@ -47,13 +47,13 @@ public class MySQL {
 
     //========== SQL Database Inserts / Entry / Updates
     //===== Run Tracker
-    //--- Table -- uuid | host_id | type | mode | flag | rsvp | name
-    public void addRun(Member member, Run run) { //Add for a single user (used for join command)
+    //--- Table -- uuid | host_id | type | mode | flag | rsvp | game_name | current_players | max_players | game_description
+    public void addRun(Member member, Run run) { //Add for a single user (used for join & host commands)
         Connection con = null;
         PreparedStatement ps = null;
         try {
             con = getConnection();
-            ps = con.prepareStatement("INSERT IGNORE INTO " + Environment.SQL_RUN_TRACKER_TABLE + " (uuid, host_id, type, mode, flag, rsvp, name) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            ps = con.prepareStatement("INSERT IGNORE INTO " + Environment.SQL_RUN_TRACKER_TABLE + " (uuid, host_id, type, mode, flag, rsvp, game_name, current_players, max_players, game_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setString(1, member.getId());
             ps.setString(2, run.getHost().getId());
             ps.setInt(3, run.getType().getNumber());
@@ -61,6 +61,9 @@ public class MySQL {
             ps.setInt(5, run.getFlag().getNumber());
             ps.setBoolean(6, run.isRsvp());
             ps.setString(7, run.getGameName());
+            ps.setInt(8, run.getMemberCount());
+            ps.setInt(9, run.getMaxMembers());
+            ps.setString(10, run.getDescription());
             ps.executeUpdate();
             con.commit();
         } catch (SQLException e) {
@@ -74,7 +77,7 @@ public class MySQL {
         PreparedStatement ps = null;
         try {
             con = getConnection();
-            ps = con.prepareStatement("INSERT IGNORE INTO " + Environment.SQL_RUN_TRACKER_TABLE + " (uuid, host_id, type, mode, flag, rsvp, name) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            ps = con.prepareStatement("INSERT IGNORE INTO " + Environment.SQL_RUN_TRACKER_TABLE + " (uuid, host_id, type, mode, flag, rsvp, game_name, current_players, max_players, game_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             for (Member member : run.getMembers()) {
                 ps.setString(1, member.getId());
                 ps.setString(2, run.getHost().getId());
@@ -83,6 +86,9 @@ public class MySQL {
                 ps.setInt(5, run.getFlag().getNumber());
                 ps.setBoolean(6, run.isRsvp());
                 ps.setString(7, run.getGameName());
+                ps.setInt(8, run.getMemberCount());
+                ps.setInt(9, run.getMaxMembers());
+                ps.setString(10, run.getDescription());
                 ps.addBatch();
             }
             ps.executeBatch();

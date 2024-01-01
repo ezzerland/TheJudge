@@ -58,7 +58,8 @@ public class Responses {
     public static String noActiveRunsOfType(boolean ladder, String type) { return "There are no active " + getLadderString(ladder) + " " + type + "s right now. Use `/host` to start a new run!"; }
     public static String announcementMade(String channel) {
         return "This game has been announced in <#" + channel + ">.\n" +
-                    "The Game Information will only be shared when people join your run.";
+                    "The Game Information will only be shared when people join your run.\n" +
+                    "**__NOTICE__**\n```Runs are now being tracked!\nPlease use, or ask a participant to use, /ng to help keep your runs maintained!```";
     }
     public static String renamedRun(String name, String password) { return "Your game information has been updated!\nNew Game Name: " + name + "\nNew Password: "+password; }
     public static String renamedRun(String name) { return "Your game information has been updated!\nNew Game Name: " + name; }
@@ -70,7 +71,7 @@ public class Responses {
     public static void amountOfActiveRuns(InteractionHook event) {
         if (BOT.getParticipants().size() == 0) { event.sendMessage(noActiveRuns()).setEphemeral(true).queue(); return; }
         String ladder = "", nonladder = "", response = "", hcladder = "", hcnonladder = "";
-        int laddercount = 0, nonladdercount = 0, hcladdercount = 0, hcnonladdercount = 0;
+        int laddercount = 0, nonladdercount = 0, hcladdercount = 0, hcnonladdercount = 0, full=0;
         Set<Button> ladderButtons = new HashSet<>(), nonLadderButtons = new HashSet<>(), hcladderButtons = new HashSet<>(), hcnonLadderButtons = new HashSet<>();
         Set<ActionRow> rows = new HashSet<>();
         for (RunType type : RunType.values()) {
@@ -79,7 +80,7 @@ public class Responses {
                 for (Run run : BOT.getLadder().get(type)) {
                     if (!run.isFull()) {
                         count++;
-                    }
+                    } else { full++; }
                 }
                 if (count > 0) {
                     laddercount += count;
@@ -89,10 +90,10 @@ public class Responses {
             }
             if (BOT.getNonLadder().get(type).size() > 0) {
                 int count = 0;
-                for (Run run : BOT.getLadder().get(type)) {
+                for (Run run : BOT.getNonLadder().get(type)) {
                     if (!run.isFull()) {
                         count++;
-                    }
+                    } else { full++; }
                 }
                 if (count > 0) {
                     nonladdercount += count;
@@ -108,10 +109,10 @@ public class Responses {
             }*/
             if (BOT.getHCLadder().get(type).size() > 0) {
                 int count = 0;
-                for (Run run : BOT.getLadder().get(type)) {
+                for (Run run : BOT.getHCLadder().get(type)) {
                     if (!run.isFull()) {
                         count++;
-                    }
+                    } else { full++; }
                 }
                 if (count > 0) {
                     hcladdercount += count;
@@ -121,10 +122,10 @@ public class Responses {
             }
             if (BOT.getHCNonLadder().get(type).size() > 0) {
                 int count = 0;
-                for (Run run : BOT.getLadder().get(type)) {
+                for (Run run : BOT.getHCNonLadder().get(type)) {
                     if (!run.isFull()) {
                         count++;
-                    }
+                    } else { full++; }
                 }
                 if (count > 0) {
                     hcnonladdercount += count;
@@ -144,6 +145,9 @@ public class Responses {
         }
         if (hcnonladdercount > 0) {
             response += "**__Open Hardcore Non-Ladder Runs: " + hcnonladdercount + "__**\n```" + hcnonladder + "\n```";
+        }
+        if (full > 0) {
+            response += "**Full Runs:** " + full + "\n";
         }
         response += "Click the buttons below or use `/listall` to see what runs are available for you to join!";
         /*event.sendMessage(response).setEphemeral(true).queue((message) -> {
@@ -229,7 +233,8 @@ public class Responses {
         }
         embed.addField("**__Reminders__**", "Leachers should help manage the run for the host! \n" +
                 "**/kick** - See a list of players in the run and kick them \n" +
-                "**/ng** - automatically increments game run-001 to run-002 etc.", false);
+                "**/ng** - Automatically increments game run-001 to run-002 etc \n" +
+                "**/leave** - Leave the run so someone else can join!", false);
         embed.addField("**__Participants in this Run__**", "Count: "+run.getMemberCount()+"/"+run.getMaxMembers()+"\n"+getParticipants(run),false);
         embed.setFooter("This run is hosted by " + run.getHost().getEffectiveName(), run.getHost().getAvatarUrl());
         return embed.build();

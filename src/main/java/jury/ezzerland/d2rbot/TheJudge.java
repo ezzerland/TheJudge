@@ -81,10 +81,28 @@ public class TheJudge {
                     " `mode` INT DEFAULT 0 ," +
                     " `flag` INT DEFAULT 0 ," +
                     " `rsvp` BOOLEAN NOT NULL DEFAULT 0 ," +
-                    " `name` VARCHAR(20) NOT NULL ," +
+                    " `game_name` VARCHAR(20) NOT NULL ," +
+                    " `current_players` INT DEFAULT 0 ," +
+                    " `max_players` INT DEFAULT 0 ," +
+                    " `game_description` VARCHAR(300) NOT NULL ," +
                     " `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ," +
                     " PRIMARY KEY (`id`))" +
                     "ENGINE = InnoDB;");
+            /*st.executeUpdate("CREATE TABLE IF NOT EXISTS `" + Environment.SQL_DATABASE + "`.`" + Environment.SQL_COMMAND_TRACKER_TABLE + "` (" +
+                    " `id` INT NOT NULL AUTO_INCREMENT ," +
+                    " `uuid` VARCHAR(36) NOT NULL ," +
+                    " `host_id` VARCHAR(36) NOT NULL ," +
+                    " `type` INT DEFAULT 0 ," +
+                    " `mode` INT DEFAULT 0 ," +
+                    " `flag` INT DEFAULT 0 ," +
+                    " `current_players` INT DEFAULT 0 ," +
+                    " `max_players` INT DEFAULT 0 ," +
+                    " `rsvp` BOOLEAN NOT NULL DEFAULT 0 ," +
+                    " `game_name` VARCHAR(20) NOT NULL ," +
+                    " `game_description` VARCHAR(300) NOT NULL ," +
+                    " `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ," +
+                    " PRIMARY KEY (`id`))" +
+                    "ENGINE = InnoDB;");*/
             st.executeUpdate("CREATE TABLE IF NOT EXISTS `" + Environment.SQL_DATABASE + "`.`" + Environment.SQL_RATINGS_TABLE + "` (" +
                     " `id` INT NOT NULL AUTO_INCREMENT ," +
                     " `uuid` VARCHAR(36) NOT NULL ," +
