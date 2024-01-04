@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.Member;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MySQL {
@@ -47,7 +48,7 @@ public class MySQL {
 
     //========== SQL Database Inserts / Entry / Updates
     //===== Run Tracker
-    //--- Table -- uuid | host_id | type | mode | flag | rsvp | game_name | current_players | max_players | game_description
+    //--- Table -- uuid | host_id | type | mode | flag | rsvp | game_name | current_players | max_players | game_description | date
     public void addRun(Member member, Run run) { //Add for a single user (used for join & host commands)
         Connection con = null;
         PreparedStatement ps = null;
@@ -148,5 +149,21 @@ public class MySQL {
 
 
     //========== SQL Database GET requests
-    //public void getTop
+    /*public ResultSet getParticipationCount() {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = getConnection();
+            ps = con.prepareStatement("SELECT COUNT (DISTINCT uuid) total_participants, COUNT (DISTINCT host_id) total_hosts FROM " + Environment.SQL_RUN_TRACKER_TABLE);
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeQuietly(ps, rs, con);
+        }
+
+        return rs;
+    }*/
 }

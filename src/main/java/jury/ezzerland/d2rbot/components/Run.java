@@ -157,9 +157,11 @@ public class Run {
         kickAllMembers();
         BOT.getParticipants().remove(host);
         if (isLadder()) {
-            BOT.getLadder().get(getType()).remove(this);
+            if (isHardcore()) { BOT.getHCLadder().get(getType()).remove(this); }
+            else { BOT.getLadder().get(getType()).remove(this); }
         } else {
-            BOT.getNonLadder().get(getType()).remove(this);
+            if (isHardcore()) { BOT.getHCNonLadder().get(getType()).remove(this); }
+            else { BOT.getNonLadder().get(getType()).remove(this); }
         }
     }
     public void updateLastAction() { lastAction = System.nanoTime(); }

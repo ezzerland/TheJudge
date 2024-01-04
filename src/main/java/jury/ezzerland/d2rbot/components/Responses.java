@@ -293,6 +293,19 @@ public class Responses {
         embed.setFooter("This run is hosted by " + user);
         return embed.build();
     }
+    public static MessageEmbed publishLeaderboard() {
+        LeaderboardData data = new LeaderboardData();
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setTitle("**MOTJ Runs Leaderboard**");
+        embed.addField("**__Total Hosts__**", Integer.toString(data.getHostsAllTime()), true);
+        embed.addField("**__Total Participants__**", Integer.toString(data.getParticipantsAllTime()), true);
+        embed.addField("", "", false);
+        embed.addField("**__Monthly Hosts__**", Integer.toString(data.getHostsThisMonth()), true);
+        embed.addField("**__Monthly Participants__**", Integer.toString(data.getParticipantsThisMonth()), true);
+        embed.setColor(Color.MAGENTA);
+        embed.setFooter("Leaderboard is still in development, thanks");
+        return embed.build();
+    }
 
 
 

@@ -10,8 +10,12 @@ import static jury.ezzerland.d2rbot.TheJudge.BOT;
 public class CmdHost {
     public CmdHost(SlashCommandInteractionEvent event) {
         if (BOT.getParticipants().containsKey(event.getMember())) {
-            event.reply(Responses.alreadyInQueue()).addActionRow(Responses.leaveButton(event.getMember().getId())).setEphemeral(true).queue();
-            return;
+            Run crun = BOT.getParticipants().get(event.getMember());
+            if (!crun.getMemberCount().equals(1)) {
+                event.reply(Responses.alreadyInQueue()).addActionRow(Responses.leaveButton(event.getMember().getId())).setEphemeral(true).queue();
+                return;
+            }
+            crun.endRun();
         }
         Run run = new Run(event.getMember());
         RunType type = RunType.valueOf(event.getOption("type").getAsString());
@@ -40,7 +44,7 @@ public class CmdHost {
             event.reply(Responses.failedToHost()).setEphemeral(true).queue();
             return;
         }
-        if (event.getValue("gamename") == null) {
+        if (event.getValue("gamename") == null || event.getValue("gamename").equals("")) {
             if (isNew) { BOT.getParticipants().remove(event.getMember()); }
             event.reply(Responses.failedToHost()).setEphemeral(true).queue();
             return;
@@ -54,6 +58,11 @@ public class CmdHost {
         }
         if (event.getValue("description") == null) { run.setDescription(""); }
         else { run.setDescription(event.getValue("description").getAsString()); }
+        if (run.getGameName().equals("") || run.getGameName().isBlank()) { // fail safe
+            if (isNew) { BOT.getParticipants().remove(event.getMember()); }
+            event.reply(Responses.failedToHost()).setEphemeral(true).queue();
+            return;
+        }
         if (isNew) {
             run.broadcastRun(true);
             BOT.getDatabase().addRun(run.getHost(), run);
