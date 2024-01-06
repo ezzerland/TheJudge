@@ -49,10 +49,10 @@ public class PlayerStats {
         }
     }
 
-    public int getRunsHostedAllTime() { return runsHostedAllTime; }
-    public int getRunsHostedThisMonth() { return runsHostedThisMonth; }
-    public int getParticipatedAllTime() { return participatedAllTime; }
-    public int getParticipatedThisMonth() { return participatedThisMonth; }
-    public int getPlayersHostedAllTime() { return playersHostedAllTime; }
-    public int getPlayersHostedThisMonth() { return playersHostedThisMonth; }
+    public int getRunsHostedAllTime() { return this.runsHostedAllTime; }
+    public int getRunsHostedThisMonth() { return this.runsHostedThisMonth; }
+    public int getParticipatedAllTime() { return this.participatedAllTime; }
+    public int getParticipatedThisMonth() { return this.participatedThisMonth; }
+    public int getPlayersHostedAllTime() { return this.playersHostedAllTime; }
+    public int getPlayersHostedThisMonth() { return this.playersHostedThisMonth; }
 }

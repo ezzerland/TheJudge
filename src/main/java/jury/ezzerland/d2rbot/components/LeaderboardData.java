@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import static jury.ezzerland.d2rbot.TheJudge.BOT;
 
 public class LeaderboardData {
-    private int participantsThisMonth, participantsAllTime, hostsThisMonth, hostsAllTime;
+    private int participantsThisMonth = 0, participantsAllTime = 0, hostsThisMonth = 0, hostsAllTime = 0, runsAllTime = 0, runsThisMonth = 0;
     private String topHostAllTime = "N/A",topParticipantAllTime = "N/A",hostWithMostAllTime = "N/A",topHostMonthly = "N/A",topParticipantMonthly = "N/A",hostWithMostMonthly = "N/A";
     private SlashCommandInteractionEvent event;
 
@@ -26,6 +26,8 @@ public class LeaderboardData {
     public int getHostsThisMonth() { return this.hostsThisMonth; }
     public int getParticipantsAllTime() { return this.participantsAllTime; }
     public int getHostsAllTime() { return this.hostsAllTime; }
+    public int getRunsAllTime() { return this.runsAllTime; }
+    public int getRunsThisMonth() { return this.runsThisMonth; }
     public String getTopHostAllTime() { return topHostAllTime; }
     public String getHostWithMostAllTime() { return hostWithMostAllTime; }
     public String getTopParticipantAllTime() { return topParticipantAllTime; }
@@ -42,16 +44,20 @@ public class LeaderboardData {
         try {
             con = BOT.getDatabase().getConnection();
             ps = con.prepareStatement("SELECT COUNT(DISTINCT uuid) AS total_participants, " +
-                            "COUNT(DISTINCT host_id) AS total_hosts, " +
-                            "(SELECT COUNT(DISTINCT uuid) FROM `" + Environment.SQL_RUN_TRACKER_TABLE + "` WHERE DATE_FORMAT(date, '%Y-%m-01') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')) AS monthly_participants, " +
-                            "(SELECT COUNT(DISTINCT host_id) FROM `" + Environment.SQL_RUN_TRACKER_TABLE + "` WHERE DATE_FORMAT(date, '%Y-%m-01') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')) AS monthly_hosts " +
-                            "FROM `" + Environment.SQL_RUN_TRACKER_TABLE + "`");
+                    "COUNT(DISTINCT host_id) AS total_hosts, " +
+                    "(SELECT COUNT(uuid) FROM `" + Environment.SQL_RUN_TRACKER_TABLE + "` WHERE uuid=host_id) AS total_runs, " +
+                    "(SELECT COUNT(uuid) FROM `" + Environment.SQL_RUN_TRACKER_TABLE + "` WHERE uuid=host_id AND DATE_FORMAT(date, '%Y-%m-01') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')) AS monthly_runs, " +
+                    "(SELECT COUNT(DISTINCT uuid) FROM `" + Environment.SQL_RUN_TRACKER_TABLE + "` WHERE DATE_FORMAT(date, '%Y-%m-01') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')) AS monthly_participants, " +
+                    "(SELECT COUNT(DISTINCT host_id) FROM `" + Environment.SQL_RUN_TRACKER_TABLE + "` WHERE DATE_FORMAT(date, '%Y-%m-01') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')) AS monthly_hosts " +
+                    "FROM `" + Environment.SQL_RUN_TRACKER_TABLE + "`");
             rs = ps.executeQuery();
             if (rs.next()) {
                 this.participantsAllTime = rs.getInt("total_participants");
                 this.participantsThisMonth = rs.getInt("monthly_participants");
                 this.hostsAllTime = rs.getInt("total_hosts");
                 this.hostsThisMonth = rs.getInt("monthly_hosts");
+                this.runsAllTime = rs.getInt("total_runs");
+                this.runsThisMonth = rs.getInt("monthly_runs");
             }
         } catch (SQLException e) {
             e.printStackTrace();

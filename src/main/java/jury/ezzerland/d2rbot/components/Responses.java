@@ -299,11 +299,11 @@ public class Responses {
         LeaderboardData data = new LeaderboardData(event);
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("**MOTJ Runs Leaderboard**");
-        embed.addField("**__This Months Leaderboards__**", data.getHostsThisMonth() + " Hosts and " + data.getParticipantsThisMonth() + " Participants\n"+
+        embed.addField("**__This Months Leaderboards__**", data.getHostsThisMonth() + " Hosts and " + data.getParticipantsThisMonth() + " Participants in " + data.getRunsThisMonth() + " runs\n"+
                 "Host with the most Runs: " + data.getTopHostMonthly() + "\n" +
                 "Host with the most Participants: " +  data.getHostWithMostMonthly() + "\n" +
                 "Participant of the most Runs: " + data.getTopParticipantMonthly(), false);
-        embed.addField("**__All Time Leaderboards__**", data.getHostsAllTime() + " Hosts and " + data.getParticipantsAllTime() + " Participants\n"+
+        embed.addField("**__All Time Leaderboards__**", data.getHostsAllTime() + " Hosts and " + data.getParticipantsAllTime() + " Participants in \" + data.getRunsAllTime() + \" runs\n"+
                 "Host with the most Runs: " + data.getTopHostAllTime() + "\n" +
                 "Host with the most Participants: " +  data.getHostWithMostAllTime() + "\n" +
                 "Participant of the most Runs: " + data.getTopParticipantAllTime(), false);
