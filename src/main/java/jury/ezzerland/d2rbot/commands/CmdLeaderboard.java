@@ -5,6 +5,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 public class CmdLeaderboard {
     public CmdLeaderboard (SlashCommandInteractionEvent event) {
-        event.replyEmbeds(Responses.publishLeaderboard()).setEphemeral(true).queue();
+        event.deferReply().queue();
+        Responses.publishLeaderboard(event);
+        //event.getHook().sendMessageEmbeds(Responses.publishLeaderboard()).setEphemeral(true).queue();
     }
 }

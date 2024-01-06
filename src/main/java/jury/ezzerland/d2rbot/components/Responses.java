@@ -3,6 +3,7 @@ package jury.ezzerland.d2rbot.components;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -293,18 +294,25 @@ public class Responses {
         embed.setFooter("This run is hosted by " + user);
         return embed.build();
     }
-    public static MessageEmbed publishLeaderboard() {
-        LeaderboardData data = new LeaderboardData();
+    public static void publishLeaderboard(SlashCommandInteractionEvent event) {
+        LeaderboardData data = new LeaderboardData(event);
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("**MOTJ Runs Leaderboard**");
-        embed.addField("**__Total Hosts__**", Integer.toString(data.getHostsAllTime()), true);
-        embed.addField("**__Total Participants__**", Integer.toString(data.getParticipantsAllTime()), true);
-        embed.addField("", "", false);
+        embed.addField("**__This Months Leaderboards__**", data.getHostsThisMonth() + " Hosts and " + data.getParticipantsThisMonth() + " Participants\n"+
+                "Host with the most Runs: " + data.getTopHostMonthly() + "\n" +
+                "Host with the most Participants: " +  data.getHostWithMostMonthly() + "\n" +
+                "Participant of the most Runs: " + data.getTopParticipantMonthly(), false);
+        embed.addField("**__All Time Leaderboards__**", data.getHostsAllTime() + " Hosts and " + data.getParticipantsAllTime() + " Participants\n"+
+                "Host with the most Runs: " + data.getTopHostAllTime() + "\n" +
+                "Host with the most Participants: " +  data.getHostWithMostAllTime() + "\n" +
+                "Participant of the most Runs: " + data.getTopParticipantAllTime(), false);
+        /*embed.addField("**__All Time Hosts__**", Integer.toString(data.getHostsAllTime()), true);
+        embed.addField("**__All Time Participants__**", Integer.toString(data.getParticipantsAllTime()), true);
+        embed.addField("--------------------", "", false);
         embed.addField("**__Monthly Hosts__**", Integer.toString(data.getHostsThisMonth()), true);
-        embed.addField("**__Monthly Participants__**", Integer.toString(data.getParticipantsThisMonth()), true);
+        embed.addField("**__Monthly Participants__**", Integer.toString(data.getParticipantsThisMonth()), true);*/
         embed.setColor(Color.MAGENTA);
-        embed.setFooter("Leaderboard is still in development, thanks");
-        return embed.build();
+        event.getHook().sendMessageEmbeds(embed.build()).queue();
     }
 
 

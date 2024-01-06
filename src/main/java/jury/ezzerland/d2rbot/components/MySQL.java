@@ -7,7 +7,6 @@ import net.dv8tion.jda.api.entities.Member;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MySQL {
