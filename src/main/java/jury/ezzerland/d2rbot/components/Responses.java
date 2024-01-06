@@ -3,6 +3,7 @@ package jury.ezzerland.d2rbot.components;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -472,10 +473,10 @@ public class Responses {
     }
 
     public static String memberName (Member member) {
-        if (member.getNickname() == null) {
-            return member.getEffectiveName();
-        }
-        return member.getNickname();
+        User user = member.getUser();
+        if (member.getNickname() != null) { return member.getNickname(); }
+        if (user.getGlobalName() != null) { return user.getGlobalName(); }
+        return member.getEffectiveName();
     }
 
 
