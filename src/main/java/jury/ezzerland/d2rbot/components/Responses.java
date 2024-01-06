@@ -313,6 +313,7 @@ public class Responses {
         embed.addField("**__Monthly Hosts__**", Integer.toString(data.getHostsThisMonth()), true);
         embed.addField("**__Monthly Participants__**", Integer.toString(data.getParticipantsThisMonth()), true);*/
         embed.setColor(Color.MAGENTA);
+        embed.setFooter("Use `/stats` to see how you stack up!");
         event.getHook().sendMessageEmbeds(embed.build()).queue();
     }
     public static void publishStats(SlashCommandInteractionEvent event) {

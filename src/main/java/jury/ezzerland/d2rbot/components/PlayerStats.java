@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import static jury.ezzerland.d2rbot.TheJudge.BOT;
 
 public class PlayerStats {
-    private int runsHostedAllTime, runsHostedThisMonth, participatedAllTime, participatedThisMonth, playersHostedAllTime, playersHostedThisMonth;
+    private int runsHostedAllTime = 0, runsHostedThisMonth = 0, participatedAllTime = 0, participatedThisMonth = 0, playersHostedAllTime = 0, playersHostedThisMonth = 0;
 
     public PlayerStats (SlashCommandInteractionEvent event) {
         setData(event.getMember().getId());
