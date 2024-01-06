@@ -37,6 +37,7 @@ public class CommandManager extends ListenerAdapter {
         commandData.add(Commands.slash("sethost", "Give host of your run to someone else").addOptions(Responses.getHostOption()));
         commandData.add(Commands.slash("rate", "Test Command").addOptions(Responses.getAddOption()));
         commandData.add(Commands.slash("leaderboard", "List the current leaderboard stats"));
+        commandData.add(Commands.slash("stats", "See your own run stats"));
         event.getJDA().updateCommands().addCommands(commandData).queue();
     }
 
@@ -91,6 +92,9 @@ public class CommandManager extends ListenerAdapter {
                 break;
             case "leaderboard":
                 new CmdLeaderboard(event);
+                break;
+            case "stats":
+                new CmdStats(event);
                 break;
             default :
                 //unknown command, do nothing

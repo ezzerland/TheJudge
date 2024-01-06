@@ -315,6 +315,21 @@ public class Responses {
         embed.setColor(Color.MAGENTA);
         event.getHook().sendMessageEmbeds(embed.build()).queue();
     }
+    public static void publishStats(SlashCommandInteractionEvent event) {
+        PlayerStats data = new PlayerStats(event);
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setTitle("**Your Run History**");
+        embed.addField("**__This Months Stats__**", ""+
+                data.getRunsHostedThisMonth() + " runs hosted\n" +
+                data.getPlayersHostedThisMonth() + " different members participated in your runs\n" +
+                data.getParticipatedThisMonth() + " runs you participated in", false);
+        embed.addField("**__All Time Stats__**", ""+
+                data.getRunsHostedAllTime() + " runs hosted\n" +
+                data.getPlayersHostedAllTime() + " different members participated in your runs\n" +
+                data.getParticipatedAllTime() + " runs you participated in", false);
+        embed.setColor(Color.MAGENTA);
+        event.getHook().sendMessageEmbeds(embed.build()).setEphemeral(true).queue();
+    }
 
 
 

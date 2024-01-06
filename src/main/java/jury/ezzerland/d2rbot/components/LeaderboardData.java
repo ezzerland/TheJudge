@@ -79,7 +79,7 @@ public class LeaderboardData {
             rs = ps.executeQuery();
             if (rs.next()) {
                 member = this.event.getGuild().getMemberById(rs.getString("host_id"));
-                if (member != null) { this.topHostAllTime = Responses.memberName(member); }
+                if (member != null) { this.topHostAllTime = Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //== Top Host This Month
             ps = con.prepareStatement("SELECT host_id, COUNT(uuid) AS runs " +
@@ -92,7 +92,7 @@ public class LeaderboardData {
             rs = ps.executeQuery();
             if (rs.next()) {
                 member = this.event.getGuild().getMemberById(rs.getString("host_id"));
-                if (member != null) { this.topHostMonthly = Responses.memberName(member); }
+                if (member != null) { this.topHostMonthly = Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //=== Host With Most Participants All Time
             ps = con.prepareStatement("SELECT host_id, COUNT(DISTINCT uuid) AS runs " +
@@ -103,7 +103,7 @@ public class LeaderboardData {
             rs = ps.executeQuery();
             if (rs.next()) {
                 member = this.event.getGuild().getMemberById(rs.getString("host_id"));
-                if (member != null) { this.hostWithMostAllTime = Responses.memberName(member); }
+                if (member != null) { this.hostWithMostAllTime = Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //== Host with Most Participants This Month
             ps = con.prepareStatement("SELECT host_id, COUNT(DISTINCT uuid) AS runs " +
@@ -115,7 +115,7 @@ public class LeaderboardData {
             rs = ps.executeQuery();
             if (rs.next()) {
                 member = this.event.getGuild().getMemberById(rs.getString("host_id"));
-                if (member != null) { this.hostWithMostMonthly = Responses.memberName(member); }
+                if (member != null) { this.hostWithMostMonthly = Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //=== Top Participant All Time
             ps = con.prepareStatement("SELECT uuid, COUNT(uuid) AS runs " +
@@ -127,7 +127,7 @@ public class LeaderboardData {
             rs = ps.executeQuery();
             if (rs.next()) {
                 member = this.event.getGuild().getMemberById(rs.getString("uuid"));
-                if (member != null) { this.topParticipantAllTime = Responses.memberName(member); }
+                if (member != null) { this.topParticipantAllTime = Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //== Top Participant This Month
             ps = con.prepareStatement("SELECT uuid, COUNT(uuid) AS runs " +
@@ -140,7 +140,7 @@ public class LeaderboardData {
             rs = ps.executeQuery();
             if (rs.next()) {
                 member = this.event.getGuild().getMemberById(rs.getString("uuid"));
-                if (member != null) { this.topParticipantMonthly = Responses.memberName(member); }
+                if (member != null) { this.topParticipantMonthly = Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
         } catch (SQLException e) {
             e.printStackTrace();
