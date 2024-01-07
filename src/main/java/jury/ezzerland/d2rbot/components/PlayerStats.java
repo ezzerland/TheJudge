@@ -35,10 +35,10 @@ public class PlayerStats {
                     "WHERE uuid='" + uuid + "' AND host_id!='" + uuid + "'");
             rs = ps.executeQuery();
             if (rs.next()) {
-                this.runsHostedAllTime = rs.getInt("participatedAllTime");
-                this.runsHostedThisMonth = rs.getInt("participatedThisMonth");
-                this.participatedAllTime = rs.getInt("runsHostedAllTime");
-                this.participatedThisMonth = rs.getInt("runsHostedThisMonth");
+                this.runsHostedAllTime = rs.getInt("runsHostedAllTime");
+                this.runsHostedThisMonth = rs.getInt("runsHostedThisMonth");
+                this.participatedAllTime = rs.getInt("participatedAllTime");
+                this.participatedThisMonth = rs.getInt("participatedThisMonth");
                 this.playersHostedAllTime = rs.getInt("playersHostedAllTime");
                 this.playersHostedThisMonth = rs.getInt("playersHostedThisMonth");
             }
