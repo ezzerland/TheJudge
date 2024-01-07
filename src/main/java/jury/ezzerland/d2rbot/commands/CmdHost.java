@@ -32,7 +32,9 @@ public class CmdHost {
             else { BOT.getNonLadder().get(type).add(run); }
         }
         if (!BOT.getParticipants().containsKey(event.getMember())) {
+            Responses.debug("Failed to Host Game - 001");
             event.reply(Responses.failedToHost()).setEphemeral(true).queue();
+            run.endRun();
             return;
         }
         event.replyModal(Responses.getGameInfoModal(true, run)).queue();
@@ -41,11 +43,13 @@ public class CmdHost {
     public CmdHost (ModalInteractionEvent event, boolean isNew) {
         Run run = BOT.getParticipants().get(event.getMember());
         if (run == null) {
+            Responses.debug("Failed to Host Game - 002");
             event.reply(Responses.failedToHost()).setEphemeral(true).queue();
             return;
         }
         if (event.getValue("gamename") == null || event.getValue("gamename").equals("")) {
-            if (isNew) { BOT.getParticipants().remove(event.getMember()); }
+            Responses.debug("Failed to Host Game - 003");
+            if (isNew) { run.endRun(); }
             event.reply(Responses.failedToHost()).setEphemeral(true).queue();
             return;
         }
@@ -59,7 +63,8 @@ public class CmdHost {
         if (event.getValue("description") == null) { run.setDescription(""); }
         else { run.setDescription(event.getValue("description").getAsString()); }
         if (run.getGameName().equals("") || run.getGameName().isBlank()) { // fail safe
-            if (isNew) { BOT.getParticipants().remove(event.getMember()); }
+            Responses.debug("Failed to Host Game - 004");
+            if (isNew) { run.endRun(); }
             event.reply(Responses.failedToHost()).setEphemeral(true).queue();
             return;
         }

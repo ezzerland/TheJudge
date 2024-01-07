@@ -491,5 +491,6 @@ public class Responses {
         return member.getEffectiveName();
     }
 
+    public static void debug (String out) { System.out.println(out);}
 
 }
