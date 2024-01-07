@@ -303,15 +303,11 @@ public class Responses {
                 "Host with the most Runs: " + data.getTopHostMonthly() + "\n" +
                 "Host with the most Participants: " +  data.getHostWithMostMonthly() + "\n" +
                 "Participant of the most Runs: " + data.getTopParticipantMonthly(), false);
-        embed.addField("**__All Time Leaderboards__**", data.getHostsAllTime() + " Hosts and " + data.getParticipantsAllTime() + " Participants in \" + data.getRunsAllTime() + \" runs\n"+
+        embed.addField("**__All Time Leaderboards__**", data.getHostsAllTime() + " Hosts and " + data.getParticipantsAllTime() + " Participants in " + data.getRunsAllTime() + " runs\n"+
                 "Host with the most Runs: " + data.getTopHostAllTime() + "\n" +
                 "Host with the most Participants: " +  data.getHostWithMostAllTime() + "\n" +
                 "Participant of the most Runs: " + data.getTopParticipantAllTime(), false);
-        /*embed.addField("**__All Time Hosts__**", Integer.toString(data.getHostsAllTime()), true);
-        embed.addField("**__All Time Participants__**", Integer.toString(data.getParticipantsAllTime()), true);
-        embed.addField("--------------------", "", false);
-        embed.addField("**__Monthly Hosts__**", Integer.toString(data.getHostsThisMonth()), true);
-        embed.addField("**__Monthly Participants__**", Integer.toString(data.getParticipantsThisMonth()), true);*/
+
         embed.setColor(Color.MAGENTA);
         embed.setFooter("Use `/stats` to see how you stack up!");
         event.getHook().sendMessageEmbeds(embed.build()).queue();
