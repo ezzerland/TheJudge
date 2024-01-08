@@ -103,7 +103,7 @@ public class LeaderboardData {
             while (rs.next()) {
                 count++;
                 member = this.event.getGuild().getMemberById(rs.getString("host_id"));
-                if (count>1) { this.topHostAllTime += "\n"; }
+                if (count>1) { this.topHostMonthly += "\n"; }
                 if (member != null) { this.topHostMonthly += "**#" + count + ".** " + Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //=== Host With Most Participants All Time
@@ -117,7 +117,7 @@ public class LeaderboardData {
             while (rs.next()) {
                 count++;
                 member = this.event.getGuild().getMemberById(rs.getString("host_id"));
-                if (count>1) { this.topHostAllTime += "\n"; }
+                if (count>1) { this.hostWithMostAllTime += "\n"; }
                 if (member != null) { this.hostWithMostAllTime += "**#" + count + ".** " + Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //== Host with Most Participants This Month
@@ -132,7 +132,7 @@ public class LeaderboardData {
             while (rs.next()) {
                 count++;
                 member = this.event.getGuild().getMemberById(rs.getString("host_id"));
-                if (count>1) { this.topHostAllTime += "\n"; }
+                if (count>1) { this.hostWithMostMonthly += "\n"; }
                 if (member != null) { this.hostWithMostMonthly += "**#" + count + ".** " + Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //=== Top Participant All Time
@@ -147,7 +147,7 @@ public class LeaderboardData {
             while (rs.next()) {
                 count++;
                 member = this.event.getGuild().getMemberById(rs.getString("uuid"));
-                if (count>1) { this.topHostAllTime += "\n"; }
+                if (count>1) { this.topParticipantAllTime += "\n"; }
                 if (member != null) { this.topParticipantAllTime += "**#" + count + ".** " + Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //== Top Participant This Month
@@ -163,7 +163,7 @@ public class LeaderboardData {
             while (rs.next()) {
                 count++;
                 member = this.event.getGuild().getMemberById(rs.getString("uuid"));
-                if (count>1) { this.topHostAllTime += "\n"; }
+                if (count>1) { this.topParticipantMonthly += "\n"; }
                 if (member != null) { this.topParticipantMonthly += "**#" + count + ".** " + Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
         } catch (SQLException e) {
