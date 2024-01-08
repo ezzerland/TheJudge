@@ -297,8 +297,26 @@ public class Responses {
     }
     public static void publishLeaderboard(SlashCommandInteractionEvent event) {
         LeaderboardData data = new LeaderboardData(event);
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("**MOTJ Runs Leaderboard**");
+        EmbedBuilder thisMonth = new EmbedBuilder(), allTime = new EmbedBuilder();
+        //Monthly Leaderboard
+        thisMonth.setTitle("**Monthly MOTJ Leaderboard**");
+        thisMonth.addField("**__Overall Statistics__**", data.getHostsThisMonth() + " Total Hosts\n" +
+                data.getParticipantsThisMonth() + " Total Participants\n" +
+                data.getRunsThisMonth() + " Total Runs", false);
+        thisMonth.addField("**__Hosted the Most Runs__**", data.getTopHostMonthly(), false);
+        thisMonth.addField("**__Host with most Participants__**", data.getHostWithMostMonthly(), false);
+        thisMonth.addField("**__Participated in the most Runs__**", data.getTopParticipantMonthly(), false);
+        thisMonth.setColor(Color.MAGENTA);
+        allTime.setTitle("**All Time MOTJ Leaderboard**");
+        allTime.addField("**__Overall Statistics__**", data.getHostsAllTime() + " Total Hosts\n" +
+                data.getParticipantsAllTime() + " Total Participants\n" +
+                data.getRunsAllTime() + " Total Runs", false);
+        allTime.addField("**__Hosted the Most Runs__**", data.getTopHostAllTime(), false);
+        allTime.addField("**__Host with most Participants__**", data.getHostWithMostAllTime(), false);
+        allTime.addField("**__Participated in the most Runs__**", data.getTopParticipantAllTime(), false);
+        allTime.setColor(Color.MAGENTA);
+        allTime.setFooter("Use /stats to see how you stack up!");
+        /*embed.setTitle("**MOTJ Runs Leaderboard**");
         embed.addField("**__This Months Leaderboards__**", data.getHostsThisMonth() + " Hosts and " + data.getParticipantsThisMonth() + " Participants in " + data.getRunsThisMonth() + " runs\n"+
                 "Host with the most Runs: " + data.getTopHostMonthly() + "\n" +
                 "Host with the most Participants: " +  data.getHostWithMostMonthly() + "\n" +
@@ -307,10 +325,9 @@ public class Responses {
                 "Host with the most Runs: " + data.getTopHostAllTime() + "\n" +
                 "Host with the most Participants: " +  data.getHostWithMostAllTime() + "\n" +
                 "Participant of the most Runs: " + data.getTopParticipantAllTime(), false);
-
         embed.setColor(Color.MAGENTA);
-        embed.setFooter("Use `/stats` to see how you stack up!");
-        event.getHook().sendMessageEmbeds(embed.build()).queue();
+        embed.setFooter("Use `/stats` to see how you stack up!");*/
+        event.getHook().sendMessageEmbeds(thisMonth.build(), allTime.build()).queue();
     }
     public static void publishStats(SlashCommandInteractionEvent event) {
         PlayerStats data = new PlayerStats(event);

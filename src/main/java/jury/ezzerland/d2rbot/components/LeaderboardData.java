@@ -13,7 +13,7 @@ import static jury.ezzerland.d2rbot.TheJudge.BOT;
 
 public class LeaderboardData {
     private int participantsThisMonth = 0, participantsAllTime = 0, hostsThisMonth = 0, hostsAllTime = 0, runsAllTime = 0, runsThisMonth = 0;
-    private String topHostAllTime = "N/A",topParticipantAllTime = "N/A",hostWithMostAllTime = "N/A",topHostMonthly = "N/A",topParticipantMonthly = "N/A",hostWithMostMonthly = "N/A";
+    private String topHostAllTime = "",topParticipantAllTime = "",hostWithMostAllTime = "",topHostMonthly = "",topParticipantMonthly = "",hostWithMostMonthly = "";
     private SlashCommandInteractionEvent event;
 
     public LeaderboardData (SlashCommandInteractionEvent event) {
@@ -74,6 +74,7 @@ public class LeaderboardData {
         Member member;
 
         try {
+            int count = 0;
             con = BOT.getDatabase().getConnection();
             //=== Top Host All Time
             ps = con.prepareStatement("SELECT host_id, COUNT(uuid) AS runs " +
@@ -81,72 +82,89 @@ public class LeaderboardData {
                     "WHERE uuid = host_id " +
                     "GROUP BY host_id " +
                     "ORDER BY runs DESC " +
-                    "LIMIT 1");
+                    "LIMIT 3");
             rs = ps.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
+                count++;
                 member = this.event.getGuild().getMemberById(rs.getString("host_id"));
-                if (member != null) { this.topHostAllTime = Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
+                if (count>1) { this.topHostAllTime += "\n"; }
+                if (member != null) { this.topHostAllTime += "**#" + count + ".** " + Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //== Top Host This Month
+            count = 0;
             ps = con.prepareStatement("SELECT host_id, COUNT(uuid) AS runs " +
                     "FROM `" + Environment.SQL_RUN_TRACKER_TABLE + "` " +
                     "WHERE uuid = host_id " +
                     "AND DATE_FORMAT(date, '%Y-%m-01') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')" +
                     "GROUP BY host_id " +
                     "ORDER BY runs DESC " +
-                    "LIMIT 1");
+                    "LIMIT 3");
             rs = ps.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
+                count++;
                 member = this.event.getGuild().getMemberById(rs.getString("host_id"));
-                if (member != null) { this.topHostMonthly = Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
+                if (count>1) { this.topHostAllTime += "\n"; }
+                if (member != null) { this.topHostMonthly += "**#" + count + ".** " + Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //=== Host With Most Participants All Time
+            count = 0;
             ps = con.prepareStatement("SELECT host_id, COUNT(DISTINCT uuid) AS runs " +
                     "FROM `" + Environment.SQL_RUN_TRACKER_TABLE + "` " +
                     "GROUP BY host_id " +
                     "ORDER BY runs DESC " +
-                    "LIMIT 1");
+                    "LIMIT 3");
             rs = ps.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
+                count++;
                 member = this.event.getGuild().getMemberById(rs.getString("host_id"));
-                if (member != null) { this.hostWithMostAllTime = Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
+                if (count>1) { this.topHostAllTime += "\n"; }
+                if (member != null) { this.hostWithMostAllTime += "**#" + count + ".** " + Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //== Host with Most Participants This Month
+            count = 0;
             ps = con.prepareStatement("SELECT host_id, COUNT(DISTINCT uuid) AS runs " +
                     "FROM `" + Environment.SQL_RUN_TRACKER_TABLE + "` " +
                     "WHERE DATE_FORMAT(date, '%Y-%m-01') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')" +
                     "GROUP BY host_id " +
                     "ORDER BY runs DESC " +
-                    "LIMIT 1");
+                    "LIMIT 3");
             rs = ps.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
+                count++;
                 member = this.event.getGuild().getMemberById(rs.getString("host_id"));
-                if (member != null) { this.hostWithMostMonthly = Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
+                if (count>1) { this.topHostAllTime += "\n"; }
+                if (member != null) { this.hostWithMostMonthly += "**#" + count + ".** " + Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //=== Top Participant All Time
+            count = 0;
             ps = con.prepareStatement("SELECT uuid, COUNT(uuid) AS runs " +
                     "FROM `" + Environment.SQL_RUN_TRACKER_TABLE + "` " +
                     "WHERE uuid != host_id " +
                     "GROUP BY uuid " +
                     "ORDER BY runs DESC " +
-                    "LIMIT 1");
+                    "LIMIT 3");
             rs = ps.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
+                count++;
                 member = this.event.getGuild().getMemberById(rs.getString("uuid"));
-                if (member != null) { this.topParticipantAllTime = Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
+                if (count>1) { this.topHostAllTime += "\n"; }
+                if (member != null) { this.topParticipantAllTime += "**#" + count + ".** " + Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
             //== Top Participant This Month
+            count = 0;
             ps = con.prepareStatement("SELECT uuid, COUNT(uuid) AS runs " +
                     "FROM `" + Environment.SQL_RUN_TRACKER_TABLE + "` " +
                     "WHERE uuid != host_id " +
                     "AND DATE_FORMAT(date, '%Y-%m-01') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01')" +
                     "GROUP BY uuid " +
                     "ORDER BY runs DESC " +
-                    "LIMIT 1");
+                    "LIMIT 3");
             rs = ps.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
+                count++;
                 member = this.event.getGuild().getMemberById(rs.getString("uuid"));
-                if (member != null) { this.topParticipantMonthly = Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
+                if (count>1) { this.topHostAllTime += "\n"; }
+                if (member != null) { this.topParticipantMonthly += "**#" + count + ".** " + Responses.memberName(member) + " (" + rs.getString("runs") + ")"; }
             }
         } catch (SQLException e) {
             e.printStackTrace();
