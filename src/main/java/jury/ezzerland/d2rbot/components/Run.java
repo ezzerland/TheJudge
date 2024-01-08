@@ -130,8 +130,9 @@ public class Run {
     public int getMaxMembers() { return this.maxMembers; }
     public void setDescription(String description) { this.description = description; }
     public String getDescription() { return this.description; }
-    public void setGameName (String gameName) {
-        if (renameIsOnCooldown()) { return; }
+    public void setGameName (String gameName) { setGameName(gameName, false); }
+    public void setGameName (String gameName, boolean isNew) {
+        if (renameIsOnCooldown() && !isNew) { return; }
         this.gameName = gameName;
         updateLastAction();
     }

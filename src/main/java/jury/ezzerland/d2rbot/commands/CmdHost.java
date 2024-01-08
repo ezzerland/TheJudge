@@ -53,7 +53,7 @@ public class CmdHost {
             event.reply(Responses.failedToHost("003")).setEphemeral(true).queue();
             return;
         }
-        run.setGameName(event.getValue("gamename").getAsString());
+        run.setGameName(event.getValue("gamename").getAsString(), true);
         if (event.getValue("password") == null) { run.setPassword(""); }
         else { run.setPassword(event.getValue("password").getAsString()); }
         if (run.getType().equals(RunType.GRUSH)) {
