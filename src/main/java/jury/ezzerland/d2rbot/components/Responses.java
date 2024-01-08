@@ -54,7 +54,7 @@ public class Responses {
     public static String notTheHost() { return "Only the host of the run has access to this command."; }
     public static String setHost(String player) { return player + " is now the host of the run. You are still in the run."; }
     public static String changedHost(String player, String host) { return player + " has given host to <@" + host + ">."; }
-    public static String failedToHost() { return "Operation Failed. Please try again!"; }
+    public static String failedToHost(String code) { return "Operation Failed - Error type " + code + ". Please try again!\nThis has been logged and reported."; }
     public static String queueNoLongerActive() { return "The run you are attempting to join is no longer active"; }
     public static String noActiveRuns() { return "There are no active runs happening right now. Use `/host` to start a new run!"; }
     public static String noActiveRunsOfType(boolean ladder, String type) { return "There are no active " + getLadderString(ladder) + " " + type + "s right now. Use `/host` to start a new run!"; }

@@ -33,7 +33,7 @@ public class CmdHost {
         }
         if (!BOT.getParticipants().containsKey(event.getMember())) {
             Responses.debug("Failed to Host Game - 001 - u:" + event.getUser().getGlobalName());
-            event.reply(Responses.failedToHost()).setEphemeral(true).queue();
+            event.reply(Responses.failedToHost("001")).setEphemeral(true).queue();
             run.endRun();
             return;
         }
@@ -44,13 +44,13 @@ public class CmdHost {
         Run run = BOT.getParticipants().get(event.getMember());
         if (run == null) {
             Responses.debug("Failed to Host Game - 002 - u:" + event.getUser().getGlobalName());
-            event.reply(Responses.failedToHost()).setEphemeral(true).queue();
+            event.reply(Responses.failedToHost("002")).setEphemeral(true).queue();
             return;
         }
         if (event.getValue("gamename") == null || event.getValue("gamename").equals("")) {
             Responses.debug("Failed to Host Game - 003 - u:" + event.getUser().getGlobalName());
             if (isNew) { run.endRun(); }
-            event.reply(Responses.failedToHost()).setEphemeral(true).queue();
+            event.reply(Responses.failedToHost("003")).setEphemeral(true).queue();
             return;
         }
         run.setGameName(event.getValue("gamename").getAsString());
@@ -65,7 +65,7 @@ public class CmdHost {
         if (run.getGameName().equals("") || run.getGameName().isBlank()) { // fail safe
             Responses.debug("Failed to Host Game - 004 - u:" + event.getUser().getGlobalName() + " - g:" + event.getValue("gamename").getAsString());
             if (isNew) { run.endRun(); }
-            event.reply(Responses.failedToHost()).setEphemeral(true).queue();
+            event.reply(Responses.failedToHost("004")).setEphemeral(true).queue();
             return;
         }
         if (isNew) {
