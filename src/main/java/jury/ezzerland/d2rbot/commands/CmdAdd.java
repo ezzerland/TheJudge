@@ -25,6 +25,8 @@ public class CmdAdd {
         Run run = BOT.getParticipants().get(event.getMember());
         if (run.addMember(member)) {
             event.reply(Responses.addToQueue(Responses.memberName(member))).addActionRow(Responses.gameInfoButton(event.getMember().getId())).setEphemeral(true).queue();
+            BOT.getDatabase().addRun(member, run);
+            BOT.getParticipants().put(member, run);
             return;
         }
         event.reply(Responses.fullQueue()).addActionRow(Responses.gameInfoButton(event.getMember().getId())).setEphemeral(true).queue();

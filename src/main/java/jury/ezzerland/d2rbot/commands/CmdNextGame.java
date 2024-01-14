@@ -26,6 +26,7 @@ public class CmdNextGame {
         }
         run.setGameName(increment(run.getGameName()));
         event.reply(Responses.renamedRun(run.getGameName())).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
+        BOT.getDatabase().addRun(run);
     }
 
     public CmdNextGame(ButtonInteractionEvent event) {
@@ -43,14 +44,15 @@ public class CmdNextGame {
             return;
         }
         run.setGameName(increment(run.getGameName()));
-        BOT.getDatabase().addRun(run);
         event.reply(Responses.renamedRun(run.getGameName())).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
+        BOT.getDatabase().addRun(run);
     }
 
 
-    static final Pattern NUMBER = Pattern.compile("\\d+");
+    static final Pattern NUMBER = Pattern.compile("\\d+$");
 
     static String increment(String input) {
+        Responses.debug("");
         return NUMBER.matcher(input)
                 .replaceFirst(s -> String.format(
                         "%0" + s.group().length() + "d",
