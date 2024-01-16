@@ -6,6 +6,7 @@ public enum RunType {
     CHAOS(1),
     TERRORZONE(2),
     GRUSH(5),
+    CRUSH(6),
     MAGICFIND(3),
     PVP(4);
 
@@ -33,6 +34,9 @@ public enum RunType {
                 break;
             case GRUSH:
                 asString = "G-RUSH";
+                break;
+            case CRUSH:
+                asString = "C-RUSH";
                 break;
             default:
                 asString = "???";

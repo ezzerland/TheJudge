@@ -6,7 +6,8 @@ public enum RunFlag {
     PRETELE(2),
     SEALPOP(3),
     ELITEHUNT(4),
-    BOSSKILL(5);
+    BOSSKILL(5),
+    PREMAP(5);
 
     private final int number;
 

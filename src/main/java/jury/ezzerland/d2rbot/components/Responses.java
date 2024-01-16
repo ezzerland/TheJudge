@@ -300,12 +300,21 @@ public class Responses {
         EmbedBuilder thisMonth = new EmbedBuilder(), allTime = new EmbedBuilder();
         //Monthly Leaderboard
         thisMonth.setTitle("**Monthly MOTJ Leaderboard**");
-        thisMonth.addField("**__Overall Statistics__**", data.getHostsThisMonth() + " Total Hosts\n" +
+        thisMonth.addField("**__This Months Statistics__**", data.getHostsThisMonth() + " Total Hosts\n" +
                 data.getParticipantsThisMonth() + " Total Participants\n" +
-                data.getRunsThisMonth() + " Total Runs", false);
-        thisMonth.addField("**__Hosted the Most Runs__**", data.getTopHostMonthly(), false);
-        thisMonth.addField("**__Host with most Participants__**", data.getHostWithMostMonthly(), false);
-        thisMonth.addField("**__Participated in the most Runs__**", data.getTopParticipantMonthly(), false);
+                data.getRunsThisMonth() + " Total Runs", true);
+        thisMonth.addField("**__Last Months Statistics__**", data.getHostsLastMonth() + " Total Hosts\n" +
+                data.getParticipantsLastMonth() + " Total Participants\n" +
+                data.getRunsLastMonth() + " Total Runs", true);
+        thisMonth.addField("","",false);
+        thisMonth.addField("**__Hosted the Most Runs__**", data.getTopHostThisMonth(), true);
+        thisMonth.addField("**__Hosted the Most Runs__**", data.getTopHostLastMonth(), true);
+        thisMonth.addField("","",false);
+        thisMonth.addField("**__Host with most Participants__**", data.getHostWithMostThisMonth(), true);
+        thisMonth.addField("**__Host with most Participants__**", data.getHostWithMostLastMonth(), true);
+        thisMonth.addField("","",false);
+        thisMonth.addField("**__Participated in the most Runs__**", data.getTopParticipantThisMonth(), true);
+        thisMonth.addField("**__Participated in the most Runs__**", data.getTopParticipantLastMonth(), true);
         thisMonth.setColor(Color.MAGENTA);
         allTime.setTitle("**All Time MOTJ Leaderboard**");
         allTime.addField("**__Overall Statistics__**", data.getHostsAllTime() + " Total Hosts\n" +
@@ -316,17 +325,7 @@ public class Responses {
         allTime.addField("**__Participated in the most Runs__**", data.getTopParticipantAllTime(), false);
         allTime.setColor(Color.MAGENTA);
         allTime.setFooter("Use /stats to see how you stack up!");
-        /*embed.setTitle("**MOTJ Runs Leaderboard**");
-        embed.addField("**__This Months Leaderboards__**", data.getHostsThisMonth() + " Hosts and " + data.getParticipantsThisMonth() + " Participants in " + data.getRunsThisMonth() + " runs\n"+
-                "Host with the most Runs: " + data.getTopHostMonthly() + "\n" +
-                "Host with the most Participants: " +  data.getHostWithMostMonthly() + "\n" +
-                "Participant of the most Runs: " + data.getTopParticipantMonthly(), false);
-        embed.addField("**__All Time Leaderboards__**", data.getHostsAllTime() + " Hosts and " + data.getParticipantsAllTime() + " Participants in " + data.getRunsAllTime() + " runs\n"+
-                "Host with the most Runs: " + data.getTopHostAllTime() + "\n" +
-                "Host with the most Participants: " +  data.getHostWithMostAllTime() + "\n" +
-                "Participant of the most Runs: " + data.getTopParticipantAllTime(), false);
-        embed.setColor(Color.MAGENTA);
-        embed.setFooter("Use `/stats` to see how you stack up!");*/
+
         event.getHook().sendMessageEmbeds(thisMonth.build(), allTime.build()).queue();
     }
     public static void publishStats(SlashCommandInteractionEvent event) {
@@ -355,6 +354,7 @@ public class Responses {
                 .addChoice("Chaos Runs", "CHAOS")
                 .addChoice("TZ Runs", "TERRORZONE")
                 .addChoice("G-Rush", "GRUSH")
+                .addChoice("C-Rush", "CRUSH")
                 .addChoice("MF Runs", "MAGICFIND")
                 .addChoice("PvP Game", "PVP");
     }
@@ -377,7 +377,8 @@ public class Responses {
                 .addChoice("Full-Clear", "FULLCLEAR")
                 .addChoice("Seal Pop", "SEALPOP")
                 .addChoice("Elite Hunt", "ELITEHUNT")
-                .addChoice("Boss Kill", "BOSSKILL");
+                .addChoice("Boss Kill", "BOSSKILL")
+                .addChoice("Pre-Mapped", "PREMAP");
     }
     public static OptionData getAddOption() {
         return new OptionData(OptionType.USER, "tag", "Discord @tag of the person you are adding", true);
