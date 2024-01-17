@@ -233,9 +233,10 @@ public class Responses {
                 embed.addField("", "Last Game Created " + run.lastAction() + " minutes ago", false);
             }
         }
-        embed.addField("**__Reminders__**", "Leachers should help manage the run for the host! \n" +
-                "**/kick** - See a list of players in the run and kick them \n" +
-                "**/ng** - Automatically increments game run-001 to run-002 etc \n" +
+        embed.addField("**__HELP YOUR HOST__**", "PLEASE use **/Nick <discord tag - toon name>** to show your IGN to us!\n" +
+                "=Leachers should help manage the run for the host!=\n" +
+                "**/kick** - See a list of players in the run and kick them\n" +
+                "**/ng** - Automatically increments game run-001 to run-002 etc\n" +
                 "**/leave** - Leave the run so someone else can join!", false);
         embed.addField("**__Participants in this Run__**", "Count: "+run.getMemberCount()+"/"+run.getMaxMembers()+"\n"+getParticipants(run),false);
         embed.setFooter("This run is hosted by " + run.getHost().getEffectiveName(), run.getHost().getAvatarUrl());
@@ -442,7 +443,7 @@ public class Responses {
                     .setPlaceholder("Input missing traits, wants/needs, or positive tidings here.")
                     .build();
         }
-        if (run.getType().equals(RunType.GRUSH)) {
+        if (run.getType().equals(RunType.GRUSH) || run.getType().equals(RunType.CRUSH)) {
             if (currentMaxPlayers != null && !currentMaxPlayers.isBlank()) {
                 maxPlayers = TextInput.create("maxplayers", "Max Players", TextInputStyle.SHORT)
                         .setMinLength(1)

@@ -90,6 +90,8 @@ public class Run {
             case CHAOS:
             case BAAL:
             case TERRORZONE:
+            case GRUSH:
+            case CRUSH:
                 return true;
             default:
                 return false;
