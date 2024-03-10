@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -203,7 +204,9 @@ public class Responses {
             return Button.primary("nonladder-judge-queue."+type, "NL "+name);
         }
     }
-    public static Button listRunsButton(String id) { return Button.primary("runs-judge-queue."+id, "View Runs"); }
+    public static Button listRunsButton(String id) { return Button.primary("runs-judge-queue"+id, "View Runs"); }
+    public static Button allTimeLeaderboardButton() { return Button.primary("alltime-leaderboard", "All Time Rankings"); }
+    public static Button statsLeaderboardButton() { return Button.secondary("stats-leaderboard", "My Run Stats"); }
 
 
 
@@ -296,9 +299,9 @@ public class Responses {
         embed.setFooter("This run is hosted by " + user);
         return embed.build();
     }
-    public static void publishLeaderboard(SlashCommandInteractionEvent event) {
+    public static void publishMonthlyLeaderboard(SlashCommandInteractionEvent event) {
         LeaderboardData data = new LeaderboardData(event);
-        EmbedBuilder thisMonth = new EmbedBuilder(), allTime = new EmbedBuilder();
+        EmbedBuilder thisMonth = new EmbedBuilder();
         //Monthly Leaderboard
         thisMonth.setTitle("**Monthly MOTJ Leaderboard**");
         thisMonth.addField("**__This Months Statistics__**", data.getHostsThisMonth() + " Total Hosts\n" +
@@ -307,16 +310,23 @@ public class Responses {
         thisMonth.addField("**__Last Months Statistics__**", data.getHostsLastMonth() + " Total Hosts\n" +
                 data.getParticipantsLastMonth() + " Total Participants\n" +
                 data.getRunsLastMonth() + " Total Runs", true);
-        thisMonth.addField("","",false);
+        thisMonth.addField("\u200B","\u200B",false);
         thisMonth.addField("**__Hosted the Most Runs__**", data.getTopHostThisMonth(), true);
         thisMonth.addField("**__Hosted the Most Runs__**", data.getTopHostLastMonth(), true);
-        thisMonth.addField("","",false);
+        thisMonth.addField("\u200B","\u200B",false);
         thisMonth.addField("**__Host with most Participants__**", data.getHostWithMostThisMonth(), true);
         thisMonth.addField("**__Host with most Participants__**", data.getHostWithMostLastMonth(), true);
-        thisMonth.addField("","",false);
+        thisMonth.addField("\u200B","\u200B",false);
         thisMonth.addField("**__Participated in the most Runs__**", data.getTopParticipantThisMonth(), true);
         thisMonth.addField("**__Participated in the most Runs__**", data.getTopParticipantLastMonth(), true);
         thisMonth.setColor(Color.MAGENTA);
+
+        event.getHook().sendMessageEmbeds(thisMonth.build()).addActionRow(Responses.allTimeLeaderboardButton(), Responses.statsLeaderboardButton()).queue();
+    }
+    public static void publishAllTimeLeaderboard(ButtonInteractionEvent event) {
+        LeaderboardData data = new LeaderboardData(event);
+        EmbedBuilder allTime = new EmbedBuilder();
+        //All Time leaderboard
         allTime.setTitle("**All Time MOTJ Leaderboard**");
         allTime.addField("**__Overall Statistics__**", data.getHostsAllTime() + " Total Hosts\n" +
                 data.getParticipantsAllTime() + " Total Participants\n" +
@@ -327,10 +337,25 @@ public class Responses {
         allTime.setColor(Color.MAGENTA);
         allTime.setFooter("Use /stats to see how you stack up!");
 
-        event.getHook().sendMessageEmbeds(thisMonth.build(), allTime.build()).queue();
+        event.getHook().sendMessageEmbeds(allTime.build()).setEphemeral(true).queue();
     }
-    public static void publishStats(SlashCommandInteractionEvent event) {
-        PlayerStats data = new PlayerStats(event);
+    public static void publishStats(SlashCommandInteractionEvent event) { // can merge content from the two functions below but for now not bothered with it
+        PlayerStats data = new PlayerStats(event.getMember().getId());
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setTitle("**Your Run History**");
+        embed.addField("**__This Months Stats__**", ""+
+                data.getRunsHostedThisMonth() + " runs hosted\n" +
+                data.getPlayersHostedThisMonth() + " different members participated in your runs\n" +
+                data.getParticipatedThisMonth() + " runs you participated in", false);
+        embed.addField("**__All Time Stats__**", ""+
+                data.getRunsHostedAllTime() + " runs hosted\n" +
+                data.getPlayersHostedAllTime() + " different members participated in your runs\n" +
+                data.getParticipatedAllTime() + " runs you participated in", false);
+        embed.setColor(Color.MAGENTA);
+        event.getHook().sendMessageEmbeds(embed.build()).setEphemeral(true).queue();
+    }
+    public static void publishStats(ButtonInteractionEvent event) {
+        PlayerStats data = new PlayerStats(event.getMember().getId());
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("**Your Run History**");
         embed.addField("**__This Months Stats__**", ""+

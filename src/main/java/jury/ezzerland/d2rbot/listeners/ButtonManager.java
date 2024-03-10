@@ -1,6 +1,7 @@
 package jury.ezzerland.d2rbot.listeners;
 
 import jury.ezzerland.d2rbot.commands.*;
+import jury.ezzerland.d2rbot.components.Responses;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -59,6 +60,13 @@ public class ButtonManager extends ListenerAdapter {
                 break;
             case "hc-nonladder-judge-queue":
                 new CmdList(event, false, true, user);
+                break;
+            case "alltime-leaderboard":
+                event.deferReply().setEphemeral(true).queue();
+                Responses.publishAllTimeLeaderboard(event);
+                break;
+            case "stats-leaderboard":
+                new CmdStats(event);
                 break;
             default:
                 //unknown Button, do nothing
