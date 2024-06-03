@@ -28,7 +28,7 @@ public class CmdListAll {
             runs.addAll(BOT.getNonLadder().get(type));
             runs.addAll(BOT.getHCLadder().get(type));
             runs.addAll(BOT.getHCNonLadder().get(type));
-            if (runs.size() == 0) { continue; }
+            if (runs.size() == 0) { break; }
             for (Run run : runs) {
                 if (run.isFull()) {
                     event.getHook().sendMessageEmbeds(Responses.gameInfo(run, true)).setEphemeral(true).queue();

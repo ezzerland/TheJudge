@@ -204,7 +204,7 @@ public class Responses {
             return Button.primary("nonladder-judge-queue."+type, "NL "+name);
         }
     }
-    public static Button listRunsButton(String id) { return Button.primary("runs-judge-queue"+id, "View Runs"); }
+    public static Button listRunsButton(String id) { return Button.primary("runs-judge-queue."+id, "View Runs"); }
     public static Button allTimeLeaderboardButton() { return Button.primary("alltime-leaderboard", "All Time Rankings"); }
     public static Button statsLeaderboardButton() { return Button.secondary("stats-leaderboard", "My Run Stats"); }
 
