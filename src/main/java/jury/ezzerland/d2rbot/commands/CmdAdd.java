@@ -27,6 +27,8 @@ public class CmdAdd {
             event.reply(Responses.addToQueue(Responses.memberName(member))).addActionRow(Responses.gameInfoButton(event.getMember().getId())).setEphemeral(true).queue();
             BOT.getDatabase().addRun(member, run);
             BOT.getParticipants().put(member, run);
+            if (run.isFull()) { run.getChannel().sendMessage(Responses.joinedQueue(Responses.memberName(member), run.getHost().getId(), run.isFullAsString(), run.getTypeAsString(), run.isRsvp())).addActionRow(Responses.getInfoButton(run.getHost().getId()), Responses.listRunsButton(run.getHost().getId())).queue(); }
+            else { run.getChannel().sendMessage(Responses.joinedQueue(Responses.memberName(member), run.getHost().getId(), run.isFullAsString(), run.getTypeAsString(), run.isRsvp())).addActionRow(Responses.joinButton(run.getHost().getId(), run.isRsvp()), Responses.getInfoButton(run.getHost().getId()), Responses.listRunsButton(run.getHost().getId())).queue(); }
             return;
         }
         event.reply(Responses.fullQueue()).addActionRow(Responses.gameInfoButton(event.getMember().getId())).setEphemeral(true).queue();

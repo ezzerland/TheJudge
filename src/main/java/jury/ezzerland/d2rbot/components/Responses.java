@@ -214,6 +214,11 @@ public class Responses {
     //========= EMBEDS
     public static MessageEmbed gameInfo(Run run, boolean isList) {
         EmbedBuilder embed = new EmbedBuilder();
+        if (run.getHost() == null) {
+            //clear the run
+            run.endRun();
+            return embed.build();
+        }
         embed.setTitle(run.getHost().getEffectiveName() + " - " + run.getModeAsString() + " " + run.getTypeAsString());
         if (run.isFull()) { embed.setColor(Color.RED); }
         else { embed.setColor(Color.GREEN); }
