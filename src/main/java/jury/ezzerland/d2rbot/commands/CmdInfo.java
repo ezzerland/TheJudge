@@ -15,34 +15,34 @@ import static jury.ezzerland.d2rbot.TheJudge.BOT;
 
 public class CmdInfo {
     public CmdInfo (SlashCommandInteractionEvent event) {
+        event.deferReply().setEphemeral(true).queue();
         if (!BOT.getParticipants().containsKey(event.getMember())) {
-            event.reply(Responses.notInQueue()).addActionRow(Responses.listRunsButton(event.getMember().getId())).setEphemeral(true).queue();
+            event.getHook().sendMessage(Responses.notInQueue()).addActionRow(Responses.listRunsButton(event.getMember().getId())).setEphemeral(true).queue();
             return;
         }
-        event.deferReply().setEphemeral(true).queue();
         new CmdInfo(event.getHook(), event.getMember(), event.getMember(), false);
     }
 
     public CmdInfo (ButtonInteractionEvent event) {
+        event.deferReply().setEphemeral(true).queue();
         if (!BOT.getParticipants().containsKey(event.getMember())) {
-            event.reply(Responses.notInQueue()).addActionRow(Responses.listRunsButton(event.getMember().getId())).setEphemeral(true).queue();
+            event.getHook().sendMessage(Responses.notInQueue()).addActionRow(Responses.listRunsButton(event.getMember().getId())).setEphemeral(true).queue();
             return;
         }
-        event.deferReply().setEphemeral(true).queue();
         new CmdInfo(event.getHook(), event.getMember(), event.getMember(), false);
     }
 
     public CmdInfo (ButtonInteractionEvent event, String user) {
+        event.deferReply().setEphemeral(true).queue();
         Member host = event.getGuild().getMemberById(user);
         if (host == null) {
-            event.reply(Responses.errorMessage("Unable to identify game host - " + user)).setEphemeral(true).queue();
+            event.getHook().sendMessage(Responses.errorMessage("Unable to identify game host - " + user)).setEphemeral(true).queue();
             return;
         }
         if (!BOT.getParticipants().containsKey(host)) {
-            event.reply(Responses.queueNoLongerActive()).addActionRow(Responses.listRunsButton(host.getId())).setEphemeral(true).queue();
+            event.getHook().sendMessage(Responses.queueNoLongerActive()).addActionRow(Responses.listRunsButton(host.getId())).setEphemeral(true).queue();
             return;
         }
-        event.deferReply().setEphemeral(true).queue();
         new CmdInfo(event.getHook(), event.getMember(), host, false);
     }
 

@@ -11,8 +11,9 @@ import static jury.ezzerland.d2rbot.TheJudge.BOT;
 
 public class CmdNextGame {
     public CmdNextGame(SlashCommandInteractionEvent event) {
+        event.deferReply().setEphemeral(true).queue();
         if (!BOT.getParticipants().containsKey(event.getMember())) {
-            event.reply(Responses.notInQueue()).setEphemeral(true).queue();
+            event.getHook().sendMessage(Responses.notInQueue()).setEphemeral(true).queue();
             return;
         }
         Run run = BOT.getParticipants().get(event.getMember());
@@ -21,17 +22,19 @@ public class CmdNextGame {
             return;
         }*/
         if (run.renameIsOnCooldown()) {
-            event.reply(Responses.renameCooldown()).setEphemeral(true).queue();
+            event.getHook().sendMessage(Responses.renameCooldown()).setEphemeral(true).queue();
             return;
         }
         run.setGameName(increment(run.getGameName()));
-        event.reply(Responses.renamedRun(run.getGameName())).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
+        event.getHook().sendMessage(Responses.renamedRun(run.getGameName())).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
+        //event.reply(Responses.renamedRun(run.getGameName())).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
         BOT.getDatabase().addRun(run);
     }
 
     public CmdNextGame(ButtonInteractionEvent event) {
+        event.deferReply().setEphemeral(true).queue();
         if (!BOT.getParticipants().containsKey(event.getMember())) {
-            event.reply(Responses.notInQueue()).setEphemeral(true).queue();
+            event.getHook().sendMessage(Responses.notInQueue()).setEphemeral(true).queue();
             return;
         }
         Run run = BOT.getParticipants().get(event.getMember());
@@ -40,11 +43,12 @@ public class CmdNextGame {
             return;
         }*/
         if (run.renameIsOnCooldown()) {
-            event.reply(Responses.renameCooldown()).setEphemeral(true).queue();
+            event.getHook().sendMessage(Responses.renameCooldown()).setEphemeral(true).queue();
             return;
         }
         run.setGameName(increment(run.getGameName()));
-        event.reply(Responses.renamedRun(run.getGameName())).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
+        event.getHook().sendMessage(Responses.renamedRun(run.getGameName())).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
+        //event.reply(Responses.renamedRun(run.getGameName())).addActionRow(Responses.broadcastButton(event.getMember().getId()), Responses.nextGameButton(event.getMember().getId())).setEphemeral(true).queue();
         BOT.getDatabase().addRun(run);
     }
 
